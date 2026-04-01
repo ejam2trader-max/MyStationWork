@@ -372,7 +372,7 @@ import { getFirestore, doc, setDoc, onSnapshot, collection, addDoc, deleteDoc, q
 //  🔧 REEMPLAZA ESTOS VALORES CON LOS DE TU PROYECTO FIREBASE
 // ══════════════════════════════════════════════════════════
 const firebaseConfig = {
-    apiKey: "AIzaSyB7DKpMIT6Quw2psRpMxjHzoUCXwmEnhj0",
+  apiKey: "AIzaSyB7DKpMIT6Quw2psRpMxjHzoUCXwmEnhj0",
   authDomain: "station-trading-grace.firebaseapp.com",
   projectId: "station-trading-grace",
   storageBucket: "station-trading-grace.firebasestorage.app",
@@ -438,38 +438,57 @@ window.connectDeriv = function(){
 
   ws.onmessage = e=>{
     const msg = JSON.parse(e.data);
-    if(msg.error){ feedLog('error',`Error: ${msg.error.message}`); return; }
 
-    // Autorización exitosa
+    // Errores no fatales: loguear y continuar (NO hacer return global)
+    if(msg.error){
+      feedLog('error',`⚠ ${msg.error.message} [${msg.msg_type||'?'}]`);
+      // Solo si es error de autorización cerramos
+      if(msg.msg_type==='authorize'){ ws.close(); return; }
+      return;
+    }
+
+    // ── PONG (heartbeat response) ──
+    if(msg.msg_type==='ping') return;
+
+    // ── AUTORIZACIÓN EXITOSA ──
     if(msg.msg_type==='authorize'){
       const acc = msg.authorize;
-      document.getElementById('deriv-account-info').textContent = `${acc.loginid} | ${acc.currency} | Balance: ${acc.balance}`;
-      document.getElementById('dv-balance').textContent = `${acc.currency} ${parseFloat(acc.balance).toFixed(2)}`;
-      feedLog('info',`✓ Conectado como ${acc.loginid} — ${acc.email||''}`);
-      // Suscribir a transacciones
+      const bal = parseFloat(acc.balance).toFixed(2);
+      document.getElementById('deriv-account-info').textContent = `${acc.loginid} | ${acc.currency} | $${bal}`;
+      document.getElementById('dv-balance').textContent = `${acc.currency} ${bal}`;
+      feedLog('info',`✓ ${acc.loginid} — ${acc.email||''} | Balance: ${acc.currency} ${bal}`);
+
+      // 1. Suscribir a transacciones en tiempo real (este SÍ acepta subscribe:1)
       ws.send(JSON.stringify({ transaction: 1, subscribe: 1 }));
-      // Suscribir a historial de operaciones abiertas
-      ws.send(JSON.stringify({ portfolio: 1, subscribe: 1 }));
-      // Cargar operaciones del día de hoy desde historial
-      loadTodayHistory(token);
+
+      // 2. Historial de hoy (profit_table, SIN subscribe)
+      loadTodayHistory();
+
+      // 3. Balance en tiempo real
+      ws.send(JSON.stringify({ balance: 1, subscribe: 1 }));
     }
 
-    // TRANSACTION — trade cerrado en tiempo real
+    // ── BALANCE ACTUALIZADO ──
+    if(msg.msg_type==='balance'){
+      const b = msg.balance;
+      document.getElementById('dv-balance').textContent = `${b.currency} ${parseFloat(b.balance).toFixed(2)}`;
+    }
+
+    // ── TRANSACCIÓN EN TIEMPO REAL ──
     if(msg.msg_type==='transaction'){
       const t = msg.transaction;
-      if(t.action==='sell' || t.action==='buy'){
+      // action: 'sell' = cierre de contrato (realizó P&L)
+      // action: 'buy'  = apertura (aún no hay P&L)
+      if(t.action === 'sell'){
         handleDerivTrade(t);
-      }
-      // Actualizar balance
-      if(t.balance !== undefined){
-        document.getElementById('dv-balance').textContent = `${t.currency||'USD'} ${parseFloat(t.balance).toFixed(2)}`;
       }
     }
 
-    // Historial cargado
+    // ── HISTORIAL DEL DÍA (profit_table) ──
     if(msg.msg_type==='profit_table'){
-      const trades = msg.profit_table.transactions || [];
-      trades.forEach(t=> handleDerivTradeHistory(t));
+      const trades = (msg.profit_table && msg.profit_table.transactions) || [];
+      feedLog('info', `Historial: ${trades.length} operaciones hoy`);
+      trades.forEach(t => handleDerivTradeHistory(t));
     }
   };
 
@@ -485,23 +504,56 @@ window.disconnectDeriv = function(){
   setDerivStatus('disconnected');
 };
 
-function loadTodayHistory(token){
-  // Cargar operaciones del día de hoy via profit_table
-  const todayStart = Math.floor(new Date().setHours(0,0,0,0)/1000);
-  const now = Math.floor(Date.now()/1000);
-  ws.send(JSON.stringify({ profit_table: 1, description: 1, sort: 'DESC', date_from: todayStart, date_to: now, limit: 100 }));
+function loadTodayHistory(){
+  // profit_table: trae operaciones cerradas. SIN subscribe.
+  // date_from/date_to en epoch segundos UTC
+  const todayStart = Math.floor(new Date().setHours(0,0,0,0) / 1000);
+  const now = Math.floor(Date.now() / 1000);
+  ws.send(JSON.stringify({
+    profit_table: 1,
+    description: 1,
+    sort: 'DESC',
+    date_from: todayStart,
+    date_to: now,
+    limit: 100
+  }));
 }
 
 function handleDerivTradeHistory(t){
-  // Procesar historial del día (evitar duplicados por contract_id)
-  const existsId = window._ops.find(o=>o.derivId===t.contract_id);
-  if(existsId) return;
-  const profit = parseFloat(t.sell_price||0) - parseFloat(t.buy_price||0);
-  const ts = (t.sell_time||t.purchase_time||0)*1000;
-  const today = new Date().toDateString();
-  const tradeDate = new Date(ts).toDateString();
-  if(tradeDate !== today) return;
-  registerDerivOp({ profit, symbol: t.shortcode||t.display_name||'Deriv', tipo: t.transaction_type||'—', ts, derivId: t.contract_id });
+  // Campos reales de profit_table de Deriv:
+  // t.contract_id, t.buy_price, t.sell_price, t.payout, t.shortcode,
+  // t.transaction_id, t.purchase_time, t.sell_time, t.app_id
+  const cid = String(t.contract_id || t.transaction_id || '');
+  if(window._ops.find(o => o.derivId === cid)) return;
+
+  const buyPrice  = parseFloat(t.buy_price  || 0);
+  const sellPrice = parseFloat(t.sell_price || 0);
+  const profit = parseFloat((sellPrice - buyPrice).toFixed(2));
+
+  // Extraer símbolo del shortcode (ej: "CALL_R_100_..." → "R_100")
+  let symbol = 'Deriv';
+  if(t.shortcode){
+    const parts = t.shortcode.split('_');
+    // shortcode: CALL_R_100_... → R_100 está en posición 1+2
+    if(parts.length >= 3) symbol = parts[1]+'_'+parts[2];
+    else symbol = parts[1] || t.shortcode.split(' ')[0] || 'Deriv';
+  }
+
+  // Tipo: CALL = BUY, PUT = SELL
+  let tipo = '—';
+  if(t.shortcode){
+    if(t.shortcode.startsWith('CALL')) tipo = 'BUY';
+    else if(t.shortcode.startsWith('PUT')) tipo = 'SELL';
+    else tipo = t.shortcode.split('_')[0];
+  }
+
+  const ts = ((t.sell_time || t.purchase_time || 0) * 1000) || Date.now();
+  // Solo los de hoy
+  if(new Date(ts).toDateString() !== new Date().toDateString()) return;
+
+  feedLog(profit >= 0 ? 'win' : 'loss',
+    `[HIST] ${symbol} | ${profit >= 0 ? '+' : ''}${profit.toFixed(2)} USD | ${tipo}`);
+  registerDerivOp({ profit, symbol, tipo, ts, derivId: cid });
 }
 
 function handleDerivTrade(t){
