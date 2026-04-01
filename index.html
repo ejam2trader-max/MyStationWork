@@ -21,47 +21,39 @@
 html,body{height:100%;background:var(--bg);color:var(--text);font-family:var(--sans);font-size:15px;overflow-x:hidden}
 ::-webkit-scrollbar{width:4px;height:4px}::-webkit-scrollbar-thumb{background:var(--border3);border-radius:4px}
 .app{display:flex;flex-direction:column;min-height:100vh}
-/* TOPBAR */
 .topbar{display:flex;align-items:center;justify-content:space-between;padding:0 18px;height:52px;background:var(--surface);border-bottom:1px solid var(--border);position:sticky;top:0;z-index:200;gap:10px}
 .logo{font-family:var(--mono);font-size:13px;font-weight:700;color:var(--accent);white-space:nowrap}
 .logo em{color:var(--text3);font-style:normal;font-size:10px}
 .pills{display:flex;align-items:center;gap:7px;flex-shrink:0}
-.pill{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:10px;padding:4px 9px;border-radius:20px;border:1px solid var(--border2);color:var(--text3);white-space:nowrap;cursor:default}
+.pill{display:inline-flex;align-items:center;gap:5px;font-family:var(--mono);font-size:10px;padding:4px 9px;border-radius:20px;border:1px solid var(--border2);color:var(--text3);white-space:nowrap}
 .pill.click{cursor:pointer}.pill.click:hover{border-color:var(--border3)}
 .dot{width:6px;height:6px;border-radius:50%;background:var(--text3);flex-shrink:0;transition:background .3s}
 .dot.on{background:var(--accent);box-shadow:0 0 5px var(--accent)}
-.dot.warn{background:var(--warn)}
-.dot.off{background:var(--text3)}
-@keyframes pulse{0%,100%{opacity:1}50%{opacity:.2}}
-.pulse{animation:pulse 2s infinite}
-/* NAV */
+.dot.warn{background:var(--warn)}.dot.off{background:var(--text3)}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.2}}.pulse{animation:pulse 2s infinite}
+@keyframes alarma{0%,100%{background:var(--danger-dim)}50%{background:#ff4d6d35}}
 .nav{display:flex;overflow-x:auto;background:var(--surface);border-bottom:1px solid var(--border);scrollbar-width:none}
 .nav::-webkit-scrollbar{display:none}
-.nav-btn{flex-shrink:0;padding:10px 16px;font-size:13px;font-weight:500;color:var(--text3);background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;transition:all .2s;white-space:nowrap}
+.nav-btn{flex-shrink:0;padding:10px 16px;font-size:13px;font-weight:500;color:var(--text3);background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;transition:all .2s;white-space:nowrap;position:relative}
 .nav-btn.active{color:var(--accent);border-bottom-color:var(--accent)}
 .nav-btn:hover:not(.active){color:var(--text)}
-/* MAIN */
+.nav-btn .nbadge{position:absolute;top:6px;right:4px;width:7px;height:7px;border-radius:50%;background:var(--danger);border:1px solid var(--bg)}
 .main{flex:1;padding:16px;max-width:980px;margin:0 auto;width:100%}
 .tab{display:none}.tab.active{display:block}
-/* CARD */
 .card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:16px;margin-bottom:12px}
 .card-title{font-family:var(--mono);font-size:10px;color:var(--text3);letter-spacing:1.2px;text-transform:uppercase;margin-bottom:14px;display:flex;align-items:center;gap:8px}
 .card-title span{flex:1}
-/* INPUTS */
 input,select,textarea{background:var(--surface2);border:1px solid var(--border2);color:var(--text);font-family:var(--sans);font-size:14px;border-radius:var(--r2);padding:9px 12px;width:100%;outline:none;transition:border .2s}
 input:focus,select:focus,textarea:focus{border-color:var(--accent)}
-input[type=password]{font-family:var(--mono);letter-spacing:2px}
 textarea{resize:vertical;min-height:70px}
 label{font-size:12px;color:var(--text2);margin-bottom:5px;display:block;font-weight:500}
 .fr{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
 .fr3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:10px}
-/* BUTTONS */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:5px;padding:8px 15px;border-radius:var(--r2);border:none;font-family:var(--sans);font-size:13px;font-weight:600;cursor:pointer;transition:all .15s;white-space:nowrap}
 .btn:active{transform:scale(.97)}
 .btn-primary{background:var(--accent);color:#000}.btn-primary:hover{background:var(--accent2)}
 .btn-ghost{background:var(--surface2);color:var(--text2);border:1px solid var(--border2)}.btn-ghost:hover{color:var(--text);border-color:var(--border3)}
-.btn-sm{padding:5px 11px;font-size:12px}
-/* METRICS */
+.btn-warn{background:var(--warn);color:#000}.btn-sm{padding:5px 11px;font-size:12px}
 .metrics{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:12px}
 @media(min-width:560px){.metrics{grid-template-columns:repeat(4,1fr)}}
 .metric{background:var(--surface2);border-radius:var(--r2);padding:12px;border:1px solid var(--border)}
@@ -69,14 +61,12 @@ label{font-size:12px;color:var(--text2);margin-bottom:5px;display:block;font-wei
 .mv{font-family:var(--mono);font-size:17px;font-weight:700;line-height:1}
 .ms{font-size:10px;color:var(--text3);margin-top:3px}
 .pos{color:var(--accent)}.neg{color:var(--danger)}.wrn{color:var(--warn)}
-/* STATUS */
 .sbar{display:flex;align-items:center;gap:8px;padding:9px 14px;border-radius:var(--r2);margin-bottom:12px;font-size:13px;font-weight:600}
 .sok{background:var(--accent-dim);border:1px solid #00e5a030;color:var(--accent)}
 .sdanger{background:var(--danger-dim);border:1px solid #ff4d6d30;color:var(--danger)}
 .swarn{background:var(--warn-dim);border:1px solid #ffb34730;color:var(--warn)}
-/* TABLE */
 .tw{overflow-x:auto;border-radius:var(--r2);border:1px solid var(--border)}
-table{width:100%;border-collapse:collapse;font-size:13px;min-width:560px}
+table{width:100%;border-collapse:collapse;font-size:13px;min-width:540px}
 th{background:var(--surface2);padding:8px 12px;text-align:left;font-size:10px;font-weight:700;color:var(--text3);letter-spacing:.8px;text-transform:uppercase;border-bottom:1px solid var(--border)}
 td{padding:9px 12px;border-bottom:1px solid var(--border);color:var(--text);vertical-align:middle}
 tr:last-child td{border-bottom:none}
@@ -86,50 +76,77 @@ tr:hover td{background:#ffffff04}
 .b-ok{background:var(--accent-dim);color:var(--accent);border:1px solid #00e5a030}
 .b-mt5{background:var(--info-dim);color:var(--info);border:1px solid #4d9fff30}
 .b-buy{background:#4d9fff15;color:var(--info)}.b-sell{background:#ff4d6d15;color:var(--danger)}
+.b-win{background:var(--accent-dim);color:var(--accent)}.b-loss{background:var(--danger-dim);color:var(--danger)}
 .empty{text-align:center;padding:28px;color:var(--text3);font-size:13px}
-/* CALC */
 .cblock{background:var(--surface2);border-radius:var(--r2);padding:14px;margin-top:12px;border:1px solid var(--border)}
 .crow{display:flex;justify-content:space-between;align-items:center;padding:6px 0;font-size:13px;border-bottom:1px solid var(--border)}
-.crow:last-child{border-bottom:none}
-.crow .k{color:var(--text2)}.crow .v{font-family:var(--mono);font-weight:700;color:var(--accent);font-size:15px}
-/* MT5 LIVE */
+.crow:last-child{border-bottom:none}.crow .k{color:var(--text2)}.crow .v{font-family:var(--mono);font-weight:700;color:var(--accent);font-size:15px}
+/* MT5 */
 .mt5-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
 @media(min-width:600px){.mt5-grid{grid-template-columns:repeat(6,1fr)}}
-.live-feed{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r2);max-height:150px;overflow-y:auto;padding:8px;margin-bottom:12px}
-.frow{font-family:var(--mono);font-size:11px;color:var(--text3);padding:3px 0;border-bottom:1px solid var(--border);display:flex;gap:8px;align-items:center}
-.frow:last-child{border-bottom:none}
-.ft{color:var(--text3);flex-shrink:0;min-width:56px}.fm{flex:1}
+.live-feed{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r2);max-height:140px;overflow-y:auto;padding:8px;margin-bottom:12px}
+.frow{font-family:var(--mono);font-size:11px;padding:3px 0;border-bottom:1px solid var(--border);display:flex;gap:8px}
+.frow:last-child{border-bottom:none}.ft{color:var(--text3);flex-shrink:0;min-width:56px}.fm{flex:1;color:var(--text2)}
 .frow.win .fm{color:var(--accent)}.frow.loss .fm{color:var(--danger)}.frow.info .fm{color:var(--info)}
-/* POSICIONES ABIERTAS */
-.open-pos{display:grid;gap:8px;margin-bottom:12px}
-.pos-card{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r2);padding:12px;display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center}
+.pos-card{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r2);padding:12px;display:grid;grid-template-columns:auto 1fr auto;gap:10px;align-items:center;margin-bottom:8px}
 .pos-symbol{font-family:var(--mono);font-size:14px;font-weight:700}
 .pos-detail{font-size:12px;color:var(--text2)}
 .pos-profit{font-family:var(--mono);font-size:16px;font-weight:700;text-align:right}
+/* HISTORIAL */
+.hist-day{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);margin-bottom:10px;overflow:hidden}
+.hist-header{display:grid;grid-template-columns:auto 1fr repeat(4,auto);gap:12px;align-items:center;padding:12px 16px;cursor:pointer;transition:background .2s}
+.hist-header:hover{background:var(--surface2)}
+.hist-day-num{font-family:var(--mono);font-size:10px;color:var(--text3);background:var(--surface2);border:1px solid var(--border2);border-radius:20px;padding:2px 8px}
+.hist-fecha{font-size:13px;font-weight:600}
+.hist-pnl{font-family:var(--mono);font-size:14px;font-weight:700}
+.hist-wr{font-size:12px;color:var(--text2)}
+.hist-ops{font-size:12px;color:var(--text3)}
+.hist-body{display:none;border-top:1px solid var(--border)}
+.hist-body.open{display:block}
+.hist-body table{min-width:400px}
+/* CURVA CAPITAL */
+.cwrap{position:relative;height:200px;margin-top:12px}
+.cwrap-lg{position:relative;height:260px;margin-top:12px}
+/* RACHA */
+.racha-grid{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.racha-day{width:32px;height:32px;border-radius:var(--r3);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;font-family:var(--mono)}
+.rd-pos{background:var(--accent-dim);color:var(--accent);border:1px solid #00e5a030}
+.rd-neg{background:var(--danger-dim);color:var(--danger);border:1px solid #ff4d6d30}
+.rd-zero{background:var(--surface2);color:var(--text3);border:1px solid var(--border)}
+/* SALUD ALARMAS */
+.alarm-panel{background:var(--danger-dim);border:1px solid #ff4d6d40;border-radius:var(--r2);padding:12px 14px;margin-bottom:12px;display:none;animation:alarma 1.5s infinite}
+.alarm-panel.active{display:flex;align-items:center;gap:10px}
+.alarm-msg{font-size:13px;font-weight:600;color:var(--danger);flex:1}
+.alarm-times{display:grid;gap:6px;margin-top:12px}
+.alarm-row{display:flex;justify-content:space-between;align-items:center;padding:8px 12px;background:var(--surface2);border-radius:var(--r2);border:1px solid var(--border)}
+.alarm-row.firing{border-color:var(--danger);background:var(--danger-dim);animation:alarma 1s infinite}
+.alarm-label{font-size:13px;font-weight:600}.alarm-time-txt{font-family:var(--mono);font-size:11px;color:var(--text2)}
 /* DAYS GRID */
 .dgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(95px,1fr));gap:7px;margin-top:12px}
-.dcell{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r2);padding:9px 6px;text-align:center}
+.dcell{background:var(--surface2);border:1px solid var(--border);border-radius:var(--r2);padding:9px 6px;text-align:center;position:relative}
 .dcell.hi{border-color:var(--accent);background:var(--accent-dim)}
-.dcell .dn{font-size:9px;color:var(--text3);margin-bottom:3px;font-family:var(--mono)}
+.dcell.real{border-color:var(--info)}
+.dcell.real-hi{border-color:var(--accent);background:var(--accent-dim)}
+.dcell .dn{font-size:9px;color:var(--text3);margin-bottom:2px;font-family:var(--mono)}
 .dcell .dv{font-family:var(--mono);font-size:12px;font-weight:700}
-/* HEALTH */
+.dcell .dr{font-family:var(--mono);font-size:10px;margin-top:2px}
+.dcell .dtag{position:absolute;top:3px;right:3px;width:6px;height:6px;border-radius:50%;background:var(--info)}
+/* HITEM */
 .hgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:12px}
 .hitem{background:var(--surface2);border-radius:var(--r2);padding:14px 8px;text-align:center;border:1px solid var(--border);cursor:pointer;transition:all .2s;user-select:none}
 .hitem.done{border-color:var(--accent);background:var(--accent-dim)}
 .hitem .ico{font-size:22px;margin-bottom:4px}.hitem .hl{font-size:11px;color:var(--text2)}
 .medrow{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;background:var(--surface2);border-radius:var(--r2);margin-bottom:6px;border:1px solid var(--border);cursor:pointer;transition:all .2s}
 .medrow.taken{border-color:var(--accent2);background:var(--accent-dim)}
+.medrow.firing{border-color:var(--danger)!important;background:var(--danger-dim)!important;animation:alarma 1s infinite}
 .mname{font-size:13px;font-weight:600}.mtime{font-size:11px;color:var(--text2);margin-top:1px}
 .chk{width:22px;height:22px;border-radius:50%;border:2px solid var(--border3);display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0;transition:all .2s}
 .medrow.taken .chk{background:var(--accent);border-color:var(--accent);color:#000;font-weight:700}
-/* CHART */
-.cwrap{position:relative;height:180px;margin-top:12px}
 /* MODAL */
 .overlay{position:fixed;inset:0;background:#000b;z-index:500;display:flex;align-items:center;justify-content:center;padding:16px}
 .modal{background:var(--surface);border:1px solid var(--border2);border-radius:var(--r);padding:20px;width:100%;max-width:460px;max-height:88vh;overflow-y:auto}
 .modal-title{font-family:var(--mono);font-size:11px;color:var(--accent);margin-bottom:16px;text-transform:uppercase;letter-spacing:1px}
 .modal-actions{display:flex;gap:8px;margin-top:14px;justify-content:flex-end}
-/* TOAST */
 .toasts{position:fixed;bottom:20px;right:18px;z-index:999;display:flex;flex-direction:column;gap:7px;pointer-events:none}
 .toast{padding:9px 15px;background:var(--surface3);border:1px solid var(--border2);border-radius:var(--r2);font-size:13px;color:var(--text);animation:tin .25s ease}
 @keyframes tin{from{opacity:0;transform:translateY(8px)}}
@@ -140,29 +157,28 @@ hr{border:none;border-top:1px solid var(--border);margin:14px 0}
 <body>
 <div class="app">
 
-<!-- TOPBAR -->
 <div class="topbar">
   <div class="logo">EA<em>/</em>WORKSTATION <em>MT5</em></div>
   <div class="pills">
-    <div class="pill"><div class="dot on pulse" id="mt5-dot"></div><span id="mt5-txt">MT5: esperando EA</span></div>
+    <div class="pill"><div class="dot on pulse" id="mt5-dot"></div><span id="mt5-txt">MT5: esperando</span></div>
     <div class="pill"><div class="dot" id="fb-dot"></div><span id="fb-txt">Firebase</span></div>
-    <div class="pill click" onclick="copyRoomLink()" title="Copiar enlace">🔗 <span id="room-txt">---</span></div>
+    <div class="pill click" onclick="copyRoomLink()">🔗 <span id="room-txt">---</span></div>
   </div>
 </div>
 
-<!-- NAV -->
 <nav class="nav">
   <button class="nav-btn active" onclick="nav('bitacora',this)">📋 Bitácora</button>
+  <button class="nav-btn" onclick="nav('historial',this)" id="nav-historial">📊 Historial</button>
   <button class="nav-btn" onclick="nav('mt5',this)">🖥 MT5 Live</button>
-  <button class="nav-btn" onclick="nav('calculadora',this)">⚡ Calculadora</button>
+  <button class="nav-btn" onclick="nav('calculadora',this)">⚡ Calc</button>
   <button class="nav-btn" onclick="nav('riesgo',this)">🛡 Riesgo</button>
   <button class="nav-btn" onclick="nav('plan21',this)">📈 21 Días</button>
-  <button class="nav-btn" onclick="nav('salud',this)">❤️ Salud</button>
+  <button class="nav-btn" onclick="nav('salud',this)" id="nav-salud">❤️ Salud</button>
 </nav>
 
 <div class="main">
 
-<!-- ══════════ BITÁCORA ══════════ -->
+<!-- ══ BITÁCORA ══ -->
 <div id="tab-bitacora" class="tab active">
   <div class="card">
     <div class="card-title"><span>Configuración del día</span>
@@ -186,87 +202,91 @@ hr{border:none;border-top:1px solid var(--border);margin:14px 0}
   <div id="b-status" class="sbar sok">✅ EN PROCESO — CONTINUAR OPERANDO</div>
   <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap">
     <button class="btn btn-primary" onclick="openAddOp()">+ Agregar manual</button>
-    <button class="btn btn-ghost" onclick="clearDay()">🗑 Limpiar día</button>
-    <button class="btn btn-ghost" onclick="exportCSV()">📥 Exportar CSV</button>
+    <button class="btn btn-warn" onclick="cerrarDia()">📦 Cerrar día y archivar</button>
+    <button class="btn btn-ghost" onclick="exportCSV()">📥 CSV</button>
   </div>
   <div class="tw">
     <table>
-      <thead><tr><th>#</th><th>Activo</th><th>Tipo</th><th>Resultado</th><th>Acum.</th><th>Com.+Swap</th><th>Origen</th><th>¿Parar?</th><th>Notas</th><th></th></tr></thead>
-      <tbody id="ops-tbody"><tr><td colspan="10" class="empty">Sin operaciones. El EA enviará los trades automáticamente.</td></tr></tbody>
+      <thead><tr><th>#</th><th>Activo</th><th>Tipo</th><th>Resultado</th><th>Acum.</th><th>Com+Swap</th><th>Origen</th><th>¿Parar?</th><th>Notas</th><th></th></tr></thead>
+      <tbody id="ops-tbody"><tr><td colspan="10" class="empty">Sin operaciones hoy.</td></tr></tbody>
     </table>
   </div>
   <div class="cwrap"><canvas id="pnl-chart"></canvas></div>
 </div>
 
-<!-- ══════════ MT5 LIVE ══════════ -->
+<!-- ══ HISTORIAL ══ -->
+<div id="tab-historial" class="tab">
+  <!-- MÉTRICAS GLOBALES -->
+  <div class="metrics" id="hist-metrics">
+    <div class="metric"><div class="ml">Días operados</div><div class="mv" id="hm-dias">0</div></div>
+    <div class="metric"><div class="ml">P&L Total</div><div class="mv" id="hm-pnl">$0.00</div></div>
+    <div class="metric"><div class="ml">Win Rate</div><div class="mv" id="hm-wr">0%</div></div>
+    <div class="metric"><div class="ml">Mejor día</div><div class="mv pos" id="hm-best">—</div></div>
+  </div>
+  <!-- CURVA DE CAPITAL -->
+  <div class="card">
+    <div class="card-title"><span>Curva de Capital Acumulada</span></div>
+    <div class="cwrap-lg"><canvas id="capital-chart"></canvas></div>
+  </div>
+  <!-- RACHA -->
+  <div class="card">
+    <div class="card-title"><span>Racha de Días</span><span id="racha-label" style="font-size:11px;color:var(--text2)"></span></div>
+    <div class="racha-grid" id="racha-grid"></div>
+  </div>
+  <!-- P&L POR DÍA -->
+  <div class="card">
+    <div class="card-title"><span>P&L por Día</span></div>
+    <div style="position:relative;height:180px;margin-top:4px"><canvas id="pnl-dia-chart"></canvas></div>
+  </div>
+  <!-- LISTA DE DÍAS -->
+  <div id="hist-list"><div class="empty">Sin historial. Usa "Cerrar día y archivar" al terminar cada sesión.</div></div>
+</div>
+
+<!-- ══ MT5 LIVE ══ -->
 <div id="tab-mt5" class="tab">
   <div class="card">
-    <div class="card-title"><span>Cuenta MT5 — Tiempo Real</span>
-      <div class="dot pulse on" id="mt5-live-dot"></div>
-    </div>
+    <div class="card-title"><span>Cuenta MT5 — Tiempo Real</span><div class="dot pulse on" id="mt5-live-dot"></div></div>
     <div class="mt5-grid">
       <div class="metric"><div class="ml">Balance</div><div class="mv" id="mt-balance">—</div><div class="ms" id="mt-currency">USD</div></div>
-      <div class="metric"><div class="ml">Equity</div><div class="mv" id="mt-equity">—</div><div class="ms">Capital real</div></div>
+      <div class="metric"><div class="ml">Equity</div><div class="mv" id="mt-equity">—</div></div>
       <div class="metric"><div class="ml">Margen Libre</div><div class="mv" id="mt-freemargin">—</div></div>
-      <div class="metric"><div class="ml">P&L Abierto</div><div class="mv" id="mt-open-profit">$0.00</div><div class="ms">Posiciones activas</div></div>
+      <div class="metric"><div class="ml">P&L Abierto</div><div class="mv" id="mt-open-profit">$0.00</div></div>
       <div class="metric"><div class="ml">Profit Hoy</div><div class="mv pos" id="mt-profit-dia">$0.00</div></div>
       <div class="metric"><div class="ml">Pérdida Hoy</div><div class="mv neg" id="mt-loss-dia">$0.00</div></div>
     </div>
-    <div style="font-size:12px;color:var(--text3);margin-bottom:10px" id="mt-account-info">Esperando conexión del EA…</div>
-    <div style="font-size:11px;color:var(--text3);font-family:var(--mono);margin-bottom:6px">ÚLTIMO HEARTBEAT</div>
-    <div id="mt-last-seen" style="font-size:11px;color:var(--text2);font-family:var(--mono)">—</div>
+    <div style="font-size:12px;color:var(--text3);margin-bottom:6px" id="mt-account-info">Esperando EA…</div>
+    <div style="font-size:11px;color:var(--text2);font-family:var(--mono)" id="mt-last-seen">—</div>
   </div>
-
   <div class="card">
-    <div class="card-title"><span>Posiciones Abiertas</span>
-      <span id="open-count" style="font-size:11px;color:var(--text2)">0 posiciones</span>
-    </div>
-    <div id="open-positions"><div class="empty">Sin posiciones abiertas</div></div>
+    <div class="card-title"><span>Posiciones Abiertas</span><span id="open-count" style="font-size:11px;color:var(--text2)">0</span></div>
+    <div id="open-positions"><div class="empty">Sin posiciones</div></div>
   </div>
-
   <div class="card">
     <div class="card-title"><span>Feed en vivo</span></div>
     <div class="live-feed" id="live-feed">
-      <div class="frow info"><span class="ft">--:--</span><span class="fm">Instala el EA FirebaseBridge.mq5 en MT5 para ver actividad aquí…</span></div>
-    </div>
-  </div>
-
-  <div class="card">
-    <div class="card-title"><span>Guía de instalación del EA</span></div>
-    <div style="font-size:13px;color:var(--text2);line-height:1.8">
-      <b style="color:var(--accent)">1.</b> Descarga <code style="background:var(--surface3);padding:2px 6px;border-radius:4px;font-family:var(--mono);font-size:11px">FirebaseBridge.mq5</code> y cópialo a <code style="background:var(--surface3);padding:2px 6px;border-radius:4px;font-family:var(--mono);font-size:11px">MQL5/Experts/</code><br>
-      <b style="color:var(--accent)">2.</b> Compílalo en MetaEditor (F7)<br>
-      <b style="color:var(--accent)">3.</b> En MT5: <b style="color:var(--text)">Herramientas → Opciones → Asesores Expertos</b><br>
-      &nbsp;&nbsp;&nbsp;✓ Activar "Permitir solicitudes web"<br>
-      &nbsp;&nbsp;&nbsp;✓ Agregar URL: <code style="background:var(--surface3);padding:2px 6px;border-radius:4px;font-family:var(--mono);font-size:11px">https://firestore.googleapis.com</code><br>
-      <b style="color:var(--accent)">4.</b> Arrastra el EA a cualquier gráfico (ej. EURUSD M1)<br>
-      <b style="color:var(--accent)">5.</b> Configura los parámetros:<br>
-      &nbsp;&nbsp;&nbsp;• <code style="font-family:var(--mono);font-size:11px;color:var(--info)">FirebaseProject</code> = tu proyecto ID<br>
-      &nbsp;&nbsp;&nbsp;• <code style="font-family:var(--mono);font-size:11px;color:var(--info)">FirebaseKey</code> = tu API key<br>
-      &nbsp;&nbsp;&nbsp;• <code style="font-family:var(--mono);font-size:11px;color:var(--info)">Room</code> = <span id="guide-room" style="color:var(--accent)">---</span><br>
-      <b style="color:var(--accent)">6.</b> ¡Listo! Cada trade aparecerá automáticamente en la bitácora.
+      <div class="frow info"><span class="ft">--:--</span><span class="fm">Esperando datos del EA FirebaseBridge…</span></div>
     </div>
   </div>
 </div>
 
-<!-- ══════════ CALCULADORA ══════════ -->
+<!-- ══ CALCULADORA ══ -->
 <div id="tab-calculadora" class="tab">
   <div class="card">
     <div class="card-title"><span>Calculadora de Lotaje</span></div>
     <div class="fr">
-      <div><label>Puntos / Distancia TP</label><input type="number" id="c-puntos" value="21" step="1" oninput="calcLotaje()"></div>
+      <div><label>Puntos / TP</label><input type="number" id="c-puntos" value="21" step="1" oninput="calcLotaje()"></div>
       <div><label>Stop Loss ($)</label><input type="number" id="c-sl" value="1" step="0.01" oninput="calcLotaje()"></div>
     </div>
     <div class="cblock">
       <div class="crow"><span class="k">PROFIT (SL × 3)</span><span class="v" id="cr-profit">3.00</span></div>
       <div class="crow"><span class="k">LOTAJE (SL ÷ Puntos)</span><span class="v" id="cr-lotaje">0.0476</span></div>
-      <div class="crow"><span class="k">2 ENTRADAS (Lotaje ÷ 2)</span><span class="v" id="cr-2ent">0.0238</span></div>
+      <div class="crow"><span class="k">2 ENTRADAS (÷ 2)</span><span class="v" id="cr-2ent">0.0238</span></div>
       <div class="crow"><span class="k">RIESGO (SL × Lotaje)</span><span class="v" id="cr-riesgo">0.0476</span></div>
     </div>
   </div>
 </div>
 
-<!-- ══════════ RIESGO ══════════ -->
+<!-- ══ RIESGO ══ -->
 <div id="tab-riesgo" class="tab">
   <div class="card">
     <div class="card-title"><span>Gestión de Riesgo Diario</span>
@@ -285,7 +305,7 @@ hr{border:none;border-top:1px solid var(--border);margin:14px 0}
   </div>
 </div>
 
-<!-- ══════════ PLAN 21 ══════════ -->
+<!-- ══ PLAN 21 ══ -->
 <div id="tab-plan21" class="tab">
   <div class="card">
     <div class="card-title"><span>Plan 21 Días — Interés Compuesto</span>
@@ -295,6 +315,10 @@ hr{border:none;border-top:1px solid var(--border);margin:14px 0}
       <div><label>Capital Inicial ($)</label><input type="number" id="p-capital" value="150" step="10" oninput="calcPlan21()"></div>
       <div><label>% Diario</label><input type="number" id="p-pct" value="20" step="0.1" oninput="calcPlan21()"></div>
     </div>
+    <div class="fr" style="margin-top:6px">
+      <div><label>Fecha inicio del plan</label><input type="date" id="p-inicio" oninput="calcPlan21()"></div>
+      <div style="display:flex;align-items:flex-end"><button class="btn btn-ghost btn-sm" onclick="savePlan21()" style="width:100%">Guardar fecha</button></div>
+    </div>
     <div class="metrics" style="margin-top:12px">
       <div class="metric"><div class="ml">Día 1</div><div class="mv pos" id="p-d1">—</div></div>
       <div class="metric"><div class="ml">Día 7</div><div class="mv pos" id="p-d7">—</div></div>
@@ -303,19 +327,24 @@ hr{border:none;border-top:1px solid var(--border);margin:14px 0}
     </div>
     <div class="metrics">
       <div class="metric"><div class="ml">Inicial</div><div class="mv" id="p-ini">—</div></div>
-      <div class="metric"><div class="ml">Final</div><div class="mv pos" id="p-fin">—</div></div>
-      <div class="metric"><div class="ml">Ganancia</div><div class="mv pos" id="p-gan">—</div></div>
-      <div class="metric"><div class="ml">Incremento</div><div class="mv pos" id="p-inc">—</div></div>
+      <div class="metric"><div class="ml">Final Proyectado</div><div class="mv pos" id="p-fin">—</div></div>
+      <div class="metric"><div class="ml">Capital Real Hoy</div><div class="mv" id="p-real">—</div><div class="ms">Del último heartbeat</div></div>
+      <div class="metric"><div class="ml">Día del Plan</div><div class="mv wrn" id="p-dia-actual">—</div></div>
     </div>
   </div>
   <div class="card">
-    <div class="card-title"><span>Progresión diaria</span></div>
+    <div class="card-title"><span>Progresión — Proyectado vs Real</span></div>
     <div class="dgrid" id="days-grid"></div>
   </div>
 </div>
 
-<!-- ══════════ SALUD ══════════ -->
+<!-- ══ SALUD ══ -->
 <div id="tab-salud" class="tab">
+  <div class="alarm-panel" id="alarm-panel">
+    <span style="font-size:20px">🔔</span>
+    <span class="alarm-msg" id="alarm-msg">Hora de tomar medicamento</span>
+    <button class="btn btn-ghost btn-sm" onclick="V('alarm-panel').classList.remove('active')">OK</button>
+  </div>
   <div class="card">
     <div class="card-title"><span>Rutina del Día</span></div>
     <div class="hgrid">
@@ -325,10 +354,27 @@ hr{border:none;border-top:1px solid var(--border);margin:14px 0}
     </div>
   </div>
   <div class="card">
-    <div class="card-title"><span>Medicamentos</span></div>
-    <div class="medrow" id="med-loz9" onclick="toggleM('loz9')"><div><div class="mname">Losartán</div><div class="mtime">9:00 AM</div></div><div class="chk">✓</div></div>
-    <div class="medrow" id="med-aml4" onclick="toggleM('aml4')"><div><div class="mname">Amlodipina</div><div class="mtime">4:00 PM</div></div><div class="chk">✓</div></div>
-    <div class="medrow" id="med-loz9pm" onclick="toggleM('loz9pm')"><div><div class="mname">Losartán</div><div class="mtime">9:00 PM</div></div><div class="chk">✓</div></div>
+    <div class="card-title"><span>Medicamentos con Alarma</span></div>
+    <div class="alarm-times">
+      <div class="alarm-row" id="alarm-loz9">
+        <div><div class="alarm-label">Losartán</div><div class="alarm-time-txt">9:00 AM</div></div>
+        <div class="medrow" id="med-loz9" onclick="toggleM('loz9')" style="margin:0;padding:6px 10px;background:transparent;border:none">
+          <div class="chk" id="chk-loz9">✓</div>
+        </div>
+      </div>
+      <div class="alarm-row" id="alarm-aml4">
+        <div><div class="alarm-label">Amlodipina</div><div class="alarm-time-txt">4:00 PM</div></div>
+        <div class="medrow" id="med-aml4" onclick="toggleM('aml4')" style="margin:0;padding:6px 10px;background:transparent;border:none">
+          <div class="chk" id="chk-aml4">✓</div>
+        </div>
+      </div>
+      <div class="alarm-row" id="alarm-loz9pm">
+        <div><div class="alarm-label">Losartán</div><div class="alarm-time-txt">9:00 PM</div></div>
+        <div class="medrow" id="med-loz9pm" onclick="toggleM('loz9pm')" style="margin:0;padding:6px 10px;background:transparent;border:none">
+          <div class="chk" id="chk-loz9pm">✓</div>
+        </div>
+      </div>
+    </div>
   </div>
   <div class="card">
     <div class="card-title"><span>Notas de Salud</span></div>
@@ -339,14 +385,14 @@ hr{border:none;border-top:1px solid var(--border);margin:14px 0}
 </div><!-- /main -->
 </div><!-- /app -->
 
-<!-- MODAL -->
+<!-- MODAL AGREGAR OP -->
 <div id="modal-add" class="overlay" style="display:none">
   <div class="modal">
     <div class="modal-title">Nueva Operación Manual</div>
-    <div style="margin-bottom:10px"><label>Activo</label><input type="text" id="op-activo" placeholder="XAUUSD, EURUSD…"></div>
+    <div style="margin-bottom:10px"><label>Activo</label><input type="text" id="op-activo" placeholder="XAUUSD…"></div>
     <div style="margin-bottom:10px"><label>Tipo</label>
       <select id="op-tipo"><option value="BUY">BUY</option><option value="SELL">SELL</option><option value="">—</option></select></div>
-    <div style="margin-bottom:10px"><label>Resultado ($) — positivo=ganancia</label><input type="number" id="op-result" placeholder="+50 o -20" step="0.01"></div>
+    <div style="margin-bottom:10px"><label>Resultado ($)</label><input type="number" id="op-result" placeholder="+50 o -20" step="0.01"></div>
     <div style="margin-bottom:10px"><label>Notas</label><textarea id="op-notas" placeholder="Observaciones…"></textarea></div>
     <div class="modal-actions">
       <button class="btn btn-ghost" onclick="closeModal()">Cancelar</button>
@@ -354,53 +400,63 @@ hr{border:none;border-top:1px solid var(--border);margin:14px 0}
     </div>
   </div>
 </div>
+
+<!-- MODAL CERRAR DIA -->
+<div id="modal-cerrar" class="overlay" style="display:none">
+  <div class="modal">
+    <div class="modal-title">Cerrar Día y Archivar</div>
+    <p style="font-size:13px;color:var(--text2);margin-bottom:14px">Se guardará el resumen de hoy en el historial y se limpiarán las operaciones del día.</p>
+    <div style="margin-bottom:10px"><label>Día del Plan 21 (1-21)</label><input type="number" id="cerrar-dia-plan" min="1" max="21" placeholder="ej: 1"></div>
+    <div style="margin-bottom:10px"><label>Notas de la sesión</label><textarea id="cerrar-notas" placeholder="Cómo fue el día, qué aprendiste…"></textarea></div>
+    <div id="cerrar-resumen" style="background:var(--surface2);border-radius:var(--r2);padding:12px;font-size:13px;margin-bottom:10px"></div>
+    <div class="modal-actions">
+      <button class="btn btn-ghost" onclick="V('modal-cerrar').style.display='none'">Cancelar</button>
+      <button class="btn btn-primary" onclick="confirmarCierreDia()">📦 Archivar y limpiar</button>
+    </div>
+  </div>
+</div>
+
 <div class="toasts" id="toasts"></div>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.js"></script>
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-import { getFirestore, doc, setDoc, onSnapshot, collection, addDoc, deleteDoc, query, orderBy, getDocs, writeBatch } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
+import { getFirestore, doc, setDoc, getDoc, onSnapshot, collection, addDoc, deleteDoc, query, orderBy, getDocs, writeBatch } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
-// ══════════════════════════════════════
-//  🔧 REEMPLAZA CON TUS CREDENCIALES
-// ══════════════════════════════════════
 const firebaseConfig = {
-    apiKey: "AIzaSyB7DKpMIT6Quw2psRpMxjHzoUCXwmEnhj0",
-  authDomain: "station-trading-grace.firebaseapp.com",
-  projectId: "station-trading-grace",
-  storageBucket: "station-trading-grace.firebasestorage.app",
-  messagingSenderId: "1075471867622",
-  appId: "1:1075471867622:web:707ede01361dadc2676527",
+  apiKey:            "TU_API_KEY",
+  authDomain:        "TU_PROYECTO.firebaseapp.com",
+  projectId:         "TU_PROYECTO_ID",
+  storageBucket:     "TU_PROYECTO.appspot.com",
+  messagingSenderId: "TU_SENDER_ID",
+  appId:             "TU_APP_ID"
 };
-// ══════════════════════════════════════
 
 // ─── ROOM ─────────────────────────────
 const params = new URLSearchParams(location.search);
 let room = params.get('room');
-if(!room){ room = Math.random().toString(36).slice(2,12); const u=new URL(location.href); u.searchParams.set('room',room); history.replaceState({},''  ,u); }
-document.getElementById('room-txt').textContent = room.slice(0,10);
-document.getElementById('guide-room').textContent = room;
-window.copyRoomLink = () => { navigator.clipboard.writeText(location.href); toast('🔗 Enlace copiado'); };
+if(!room){ room=Math.random().toString(36).slice(2,12); const u=new URL(location.href); u.searchParams.set('room',room); history.replaceState({},''  ,u); }
+V('room-txt').textContent = room.slice(0,10);
+window.copyRoomLink = ()=>{ navigator.clipboard.writeText(location.href); toast('🔗 Enlace copiado'); };
 
 // ─── FIREBASE ─────────────────────────
-let db = null;
+let db=null;
 try{
-  const app = initializeApp(firebaseConfig);
-  db = getFirestore(app);
+  const app=initializeApp(firebaseConfig);
+  db=getFirestore(app);
   setupListeners();
-  document.getElementById('fb-dot').className='dot on';
-  document.getElementById('fb-txt').textContent='Firebase ✓';
+  V('fb-dot').className='dot on';
+  V('fb-txt').textContent='Firebase ✓';
 }catch(e){
-  document.getElementById('fb-dot').className='dot warn';
-  document.getElementById('fb-txt').textContent='Sin Firebase';
+  V('fb-dot').className='dot warn';
+  V('fb-txt').textContent='Sin Firebase';
 }
-
 function rd(p){ return doc(db,'rooms',room,p); }
 function rc(p){ return collection(db,'rooms',room,p); }
 
-// ─── LISTENERS FIREBASE ───────────────
+// ─── LISTENERS ────────────────────────
+let _historial = [];
 function setupListeners(){
-  // Config del día
   onSnapshot(rd('config/day'), s=>{
     if(!s.exists()) return;
     const d=s.data();
@@ -410,27 +466,21 @@ function setupListeners(){
     if(d.metaperd) V('b-meta-perd').value=d.metaperd;
     calcBitacora();
   });
-
-  // Operaciones (trades cerrados)
   onSnapshot(query(rc('ops'),orderBy('ts')), s=>{
-    window._ops = s.docs.map(d=>({id:d.id,...d.data()}));
+    window._ops=s.docs.map(d=>({id:d.id,...d.data()}));
     renderOps(); calcBitacora(); updateMT5Totals();
   });
-
-  // Estado de la cuenta MT5 (enviado por el EA cada 30s)
   onSnapshot(rd('account/estado'), s=>{
     if(!s.exists()) return;
-    const d = s.data();
-    updateMT5Status(d);
+    updateMT5Status(s.data());
   });
-
-  // Posiciones abiertas (enviadas por el EA)
   onSnapshot(rc('open_positions'), s=>{
-    const positions = s.docs.map(d=>({id:d.id,...d.data()}));
-    renderOpenPositions(positions);
+    renderOpenPositions(s.docs.map(d=>({id:d.id,...d.data()})));
   });
-
-  // Config riesgo
+  onSnapshot(query(rc('historial'),orderBy('fecha')), s=>{
+    _historial = s.docs.map(d=>({id:d.id,...d.data()}));
+    renderHistorial();
+  });
   onSnapshot(rd('config/riesgo'), s=>{
     if(!s.exists()) return;
     const d=s.data();
@@ -439,300 +489,478 @@ function setupListeners(){
     if(d.ops) V('r-ops').value=d.ops;
     calcRiesgo();
   });
-
-  // Config plan 21
   onSnapshot(rd('config/plan21'), s=>{
     if(!s.exists()) return;
     const d=s.data();
     if(d.capital) V('p-capital').value=d.capital;
     if(d.pct) V('p-pct').value=d.pct;
+    if(d.inicio) V('p-inicio').value=d.inicio;
     calcPlan21();
   });
-
-  // Salud
   onSnapshot(rd('config/salud'), s=>{
     if(!s.exists()) return;
     window._salud=s.data(); renderSalud(s.data());
   });
 }
 
-// ─── MT5 STATUS ───────────────────────
-let _mt5Online = false;
-let _mt5CheckTimer = null;
-
+// ─── MT5 ──────────────────────────────
+let _mt5Balance = 0;
 function updateMT5Status(d){
-  _mt5Online = true;
-  clearTimeout(_mt5CheckTimer);
-  // Marcar offline si no recibimos heartbeat en 90s
-  _mt5CheckTimer = setTimeout(()=>{
-    _mt5Online = false;
-    document.getElementById('mt5-dot').className='dot warn pulse';
-    document.getElementById('mt5-txt').textContent='MT5: sin señal';
-    document.getElementById('mt5-live-dot').className='dot warn pulse';
-    feedLog('info','⚠ Sin heartbeat del EA — verifica que MT5 esté corriendo');
-  }, 90000);
-
-  document.getElementById('mt5-dot').className='dot on pulse';
-  document.getElementById('mt5-txt').textContent='MT5: online ✓';
-  document.getElementById('mt5-live-dot').className='dot on pulse';
-
-  const fmt = v => '$'+parseFloat(v||0).toFixed(2);
-  const cur = d.currency||'USD';
-
-  document.getElementById('mt-balance').textContent = fmt(d.balance);
-  document.getElementById('mt-balance').className = 'mv';
-  document.getElementById('mt-equity').textContent = fmt(d.equity);
-  document.getElementById('mt-freemargin').textContent = fmt(d.freeMargin);
-  document.getElementById('mt-currency').textContent = cur;
-
-  const openP = parseFloat(d.profitAbierto||0);
-  const opEl = document.getElementById('mt-open-profit');
-  opEl.textContent = (openP>=0?'+':'')+fmt(openP).replace('$','$');
-  opEl.className = 'mv '+(openP>0?'pos':openP<0?'neg':'');
-
-  const ts = d.ts ? new Date(d.ts).toLocaleTimeString('es') : '—';
-  document.getElementById('mt-last-seen').textContent = ts + ' | ' + (d.evento||'');
-  document.getElementById('mt-account-info').textContent =
-    `Login: ${d.login||'?'} | ${d.nombre||''} | ${d.broker||''} | 1:${d.leverage||'?'} | ${cur}`;
-
-  feedLog('info', `Heartbeat: Balance ${fmt(d.balance)} | Equity ${fmt(d.equity)} | Margen libre ${fmt(d.freeMargin)}`);
+  _mt5Balance = parseFloat(d.balance||0);
+  clearTimeout(window._mt5Timer);
+  window._mt5Timer = setTimeout(()=>{
+    V('mt5-dot').className='dot warn pulse';
+    V('mt5-txt').textContent='MT5: sin señal';
+    V('mt5-live-dot').className='dot warn pulse';
+  },90000);
+  V('mt5-dot').className='dot on pulse'; V('mt5-txt').textContent='MT5: online ✓';
+  V('mt5-live-dot').className='dot on pulse';
+  const fmt=v=>'$'+parseFloat(v||0).toFixed(2), cur=d.currency||'USD';
+  V('mt-balance').textContent=fmt(d.balance); V('mt-equity').textContent=fmt(d.equity);
+  V('mt-freemargin').textContent=fmt(d.freeMargin); V('mt-currency').textContent=cur;
+  const op=parseFloat(d.profitAbierto||0);
+  V('mt-open-profit').textContent=(op>=0?'+':'')+fmt(op);
+  V('mt-open-profit').className='mv '+(op>0?'pos':op<0?'neg':'');
+  V('mt-last-seen').textContent=(d.ts?new Date(d.ts).toLocaleTimeString('es'):'')+' | '+(d.evento||'');
+  V('mt-account-info').textContent=`${d.login||'?'} | ${d.nombre||''} | ${d.broker||''} | 1:${d.leverage||'?'} | ${cur}`;
+  feedLog('info',`Balance ${fmt(d.balance)} | Equity ${fmt(d.equity)} | Libre ${fmt(d.freeMargin)}`);
+  // Actualizar capital real en Plan 21
+  V('p-real').textContent=fmt(d.balance);
+  calcPlan21();
 }
-
 function updateMT5Totals(){
-  let profitHoy=0, lossHoy=0;
-  window._ops.forEach(o=>{
-    const r = parseFloat(o.result||0);
-    if(r > 0) profitHoy += r;
-    else lossHoy += Math.abs(r);
-  });
-  document.getElementById('mt-profit-dia').textContent = '+$'+profitHoy.toFixed(2);
-  document.getElementById('mt-loss-dia').textContent = '-$'+lossHoy.toFixed(2);
+  let p=0,l=0;
+  window._ops.forEach(o=>{ const r=parseFloat(o.result||0); if(r>0)p+=r; else l+=Math.abs(r); });
+  V('mt-profit-dia').textContent='+$'+p.toFixed(2);
+  V('mt-loss-dia').textContent='-$'+l.toFixed(2);
 }
-
 function renderOpenPositions(positions){
-  const cont = document.getElementById('open-positions');
-  const count = positions.filter(p=>p.status==='open').length;
-  document.getElementById('open-count').textContent = count + ' posición' + (count!==1?'es':'');
-
-  const open = positions.filter(p=>p.status==='open');
-  if(!open.length){ cont.innerHTML='<div class="empty">Sin posiciones abiertas</div>'; return; }
-
-  cont.innerHTML = open.map(p=>{
-    const profit = parseFloat(p.profit||0);
-    const cls = profit>=0?'pos':'neg';
-    const tipoCls = p.tipo==='BUY'?'b-buy':'b-sell';
-    return `<div class="pos-card">
-      <div>
-        <div class="pos-symbol">${p.activo||'?'}</div>
-        <span class="badge ${tipoCls}">${p.tipo||'?'}</span>
-      </div>
-      <div class="pos-detail">
-        Vol: ${parseFloat(p.volume||0).toFixed(2)} | Open: ${parseFloat(p.priceOpen||0).toFixed(5)}<br>
-        SL: ${parseFloat(p.sl||0).toFixed(5)} | TP: ${parseFloat(p.tp||0).toFixed(5)}
-      </div>
-      <div class="pos-profit ${cls}">${profit>=0?'+':''}$${profit.toFixed(2)}</div>
-    </div>`;
+  const open=positions.filter(p=>p.status==='open');
+  V('open-count').textContent=open.length+' posición'+(open.length!==1?'es':'');
+  if(!open.length){V('open-positions').innerHTML='<div class="empty">Sin posiciones</div>';return;}
+  V('open-positions').innerHTML=open.map(p=>{
+    const pf=parseFloat(p.profit||0), cls=pf>=0?'pos':'neg', tc=p.tipo==='BUY'?'b-buy':'b-sell';
+    return `<div class="pos-card"><div><div class="pos-symbol">${p.activo||'?'}</div><span class="badge ${tc}">${p.tipo||'?'}</span></div>
+    <div class="pos-detail">Vol: ${parseFloat(p.volume||0).toFixed(2)} | Open: ${parseFloat(p.priceOpen||0).toFixed(5)}<br>SL: ${parseFloat(p.sl||0).toFixed(5)} | TP: ${parseFloat(p.tp||0).toFixed(5)}</div>
+    <div class="pos-profit ${cls}">${pf>=0?'+':''}$${pf.toFixed(2)}</div></div>`;
   }).join('');
-
-  // Feed entry for new positions
 }
 
-// ─── BITÁCORA ────────────────────────
-window._ops = [];
-
-window.saveDayConfig = async () => {
-  if(!db){ toast('Configura Firebase primero'); return; }
-  await setDoc(rd('config/day'),{
-    saldo: parseFloat(V('b-saldo').value)||0,
-    fecha: V('b-fecha').value,
-    metagan: parseFloat(V('b-meta-gan').value)||3,
-    metaperd: parseFloat(V('b-meta-perd').value)||1
-  });
+// ─── BITÁCORA ─────────────────────────
+window._ops=[];
+window.saveDayConfig = async()=>{
+  if(!db){toast('Configura Firebase');return;}
+  await setDoc(rd('config/day'),{saldo:parseFloat(V('b-saldo').value)||0,fecha:V('b-fecha').value,metagan:parseFloat(V('b-meta-gan').value)||3,metaperd:parseFloat(V('b-meta-perd').value)||1});
   toast('✅ Config guardada');
 };
-
-window.calcBitacora = () => {
-  const saldo = parseFloat(V('b-saldo').value)||0;
-  const mg = parseFloat(V('b-meta-gan').value)||3;
-  const mp = parseFloat(V('b-meta-perd').value)||1;
-  const pnl = window._ops.reduce((a,o)=>a+(parseFloat(o.result)||0),0);
-  const pct = saldo>0 ? (pnl/saldo*100) : 0;
+window.calcBitacora = ()=>{
+  const saldo=parseFloat(V('b-saldo').value)||0, mg=parseFloat(V('b-meta-gan').value)||3, mp=parseFloat(V('b-meta-perd').value)||1;
+  const pnl=window._ops.reduce((a,o)=>a+(parseFloat(o.result)||0),0), pct=saldo>0?(pnl/saldo*100):0;
   const mGan=saldo*mg/100, mPerd=saldo*mp/100;
-
-  V('m-mg').textContent = '$'+mGan.toFixed(2);
-  V('m-mp').textContent = '-$'+mPerd.toFixed(2);
-
+  V('m-mg').textContent='$'+mGan.toFixed(2); V('m-mp').textContent='-$'+mPerd.toFixed(2);
   const pe=V('m-pnl'); pe.textContent=(pnl>=0?'+$':'$')+pnl.toFixed(2); pe.className='mv '+(pnl>0?'pos':pnl<0?'neg':'');
   const pp=V('m-pct'); pp.textContent=pct.toFixed(2)+'%'; pp.className='mv '+(pct>0?'pos':pct<0?'neg':'');
-
   const sb=V('b-status');
   if(pnl>=mGan){sb.className='sbar sok';sb.textContent='🏆 META ALCANZADA — DETENER HOY';}
   else if(pnl<=-mPerd){sb.className='sbar sdanger';sb.textContent='🛑 LÍMITE DE PÉRDIDA — PARAR OPERACIONES';}
   else{sb.className='sbar sok';sb.textContent='✅ EN PROCESO — CONTINUAR OPERANDO';}
   renderChart();
 };
-
-window.openAddOp = () => V('modal-add').style.display='flex';
-window.closeModal = () => V('modal-add').style.display='none';
-
-window.addOpManual = async () => {
-  const activo=V('op-activo').value.trim();
-  const result=parseFloat(V('op-result').value)||0;
-  const notas=V('op-notas').value.trim();
-  const tipo=V('op-tipo').value;
-  if(!activo){toast('⚠ Ingresa el activo');return;}
-  const saldo=parseFloat(V('b-saldo').value)||0;
-  const mp=parseFloat(V('b-meta-perd').value)||1;
+window.openAddOp=()=>V('modal-add').style.display='flex';
+window.closeModal=()=>V('modal-add').style.display='none';
+window.addOpManual=async()=>{
+  const activo=V('op-activo').value.trim(), result=parseFloat(V('op-result').value)||0, notas=V('op-notas').value.trim(), tipo=V('op-tipo').value;
+  if(!activo){toast('⚠ Ingresa activo');return;}
+  const saldo=parseFloat(V('b-saldo').value)||0, mp=parseFloat(V('b-meta-perd').value)||1;
   const cum=window._ops.reduce((a,o)=>a+(parseFloat(o.result)||0),0)+result;
-  const parar = cum <= -(saldo*mp/100) ? 'SI':'NO';
+  const parar=cum<=-(saldo*mp/100)?'SI':'NO';
   const op={activo,result,tipo,notas,parar,ts:Date.now(),origen:'manual',commission:0,swap:0};
-  if(db){ await addDoc(rc('ops'),op); }
-  else { window._ops.push({id:Date.now().toString(),...op}); renderOps(); calcBitacora(); }
-  V('op-activo').value=''; V('op-result').value=''; V('op-notas').value='';
-  closeModal(); toast('✅ Operación registrada');
+  if(db){await addDoc(rc('ops'),op);}else{window._ops.push({id:Date.now().toString(),...op});renderOps();calcBitacora();}
+  V('op-activo').value='';V('op-result').value='';V('op-notas').value='';
+  closeModal();toast('✅ Operación registrada');
 };
-
-window.delOp = async id => {
-  if(!confirm('¿Eliminar?')) return;
-  if(db){ await deleteDoc(doc(db,'rooms',room,'ops',id)); }
-  else { window._ops=window._ops.filter(o=>o.id!==id); renderOps(); calcBitacora(); }
+window.delOp=async id=>{
+  if(!confirm('¿Eliminar?'))return;
+  if(db){await deleteDoc(doc(db,'rooms',room,'ops',id));}
+  else{window._ops=window._ops.filter(o=>o.id!==id);renderOps();calcBitacora();}
 };
-
-window.renderOps = () => {
-  const tb = V('ops-tbody');
-  if(!window._ops.length){
-    tb.innerHTML='<tr><td colspan="10" class="empty">Sin operaciones. El EA enviará trades automáticamente desde MT5.</td></tr>';
-    return;
-  }
+window.renderOps=()=>{
+  const tb=V('ops-tbody');
+  if(!window._ops.length){tb.innerHTML='<tr><td colspan="10" class="empty">Sin operaciones hoy.</td></tr>';return;}
   let acc=0;
-  tb.innerHTML = window._ops.map((o,i)=>{
-    const r=parseFloat(o.result||0);
-    acc+=r;
-    const rc2=r>=0?'pos':'neg', ac2=acc>=0?'pos':'neg';
-    const tc=o.tipo==='BUY'?'b-buy':o.tipo==='SELL'?'b-sell':'';
-    const orig=o.origen==='mt5'
-      ?'<span class="badge b-mt5">MT5</span>'
-      :'<span class="badge" style="background:var(--surface3);color:var(--text3);border:1px solid var(--border2)">MANUAL</span>';
-    const com = parseFloat(o.commission||0)+parseFloat(o.swap||0);
-    return `<tr>
-      <td>${i+1}</td>
-      <td><b>${o.activo}</b></td>
-      <td>${o.tipo?`<span class="badge ${tc}">${o.tipo}</span>`:'—'}</td>
-      <td class="${rc2}">${r>=0?'+':''}${r.toFixed(2)}</td>
-      <td class="${ac2}">${acc>=0?'+':''}${acc.toFixed(2)}</td>
-      <td style="font-size:11px;color:var(--text3);font-family:var(--mono)">${com!==0?com.toFixed(2):'—'}</td>
-      <td>${orig}</td>
-      <td><span class="badge ${o.parar==='SI'?'b-stop':'b-ok'}">${o.parar||'NO'}</span></td>
-      <td style="font-size:12px;color:var(--text2);max-width:110px">${o.notas||'—'}</td>
-      <td><button class="btn btn-ghost btn-sm" style="padding:4px 8px" onclick="delOp('${o.id}')">✕</button></td>
-    </tr>`;
+  tb.innerHTML=window._ops.map((o,i)=>{
+    const r=parseFloat(o.result||0); acc+=r;
+    const rc2=r>=0?'pos':'neg',ac2=acc>=0?'pos':'neg',tc=o.tipo==='BUY'?'b-buy':o.tipo==='SELL'?'b-sell':'';
+    const orig=o.origen==='mt5'?'<span class="badge b-mt5">MT5</span>':'<span class="badge" style="background:var(--surface3);color:var(--text3);border:1px solid var(--border2)">MANUAL</span>';
+    const com=(parseFloat(o.commission||0)+parseFloat(o.swap||0));
+    return `<tr><td>${i+1}</td><td><b>${o.activo}</b></td>
+    <td>${o.tipo?`<span class="badge ${tc}">${o.tipo}</span>`:'—'}</td>
+    <td class="${rc2}">${r>=0?'+':''}${r.toFixed(2)}</td>
+    <td class="${ac2}">${acc>=0?'+':''}${acc.toFixed(2)}</td>
+    <td style="font-size:11px;color:var(--text3);font-family:var(--mono)">${com!==0?com.toFixed(2):'—'}</td>
+    <td>${orig}</td>
+    <td><span class="badge ${o.parar==='SI'?'b-stop':'b-ok'}">${o.parar||'NO'}</span></td>
+    <td style="font-size:12px;color:var(--text2);max-width:110px">${o.notas||'—'}</td>
+    <td><button class="btn btn-ghost btn-sm" style="padding:4px 8px" onclick="delOp('${o.id}')">✕</button></td></tr>`;
   }).join('');
 };
-
-window.clearDay = async () => {
-  if(!confirm('¿Limpiar todas las operaciones?')) return;
-  if(db){ const s=await getDocs(rc('ops')); const b=writeBatch(db); s.forEach(d=>b.delete(d.ref)); await b.commit(); }
-  else { window._ops=[]; renderOps(); calcBitacora(); }
-  toast('🗑 Operaciones eliminadas');
+window.exportCSV=()=>{
+  let csv='#,Activo,Tipo,Resultado,Com+Swap,Acumulado,Origen,Parar,Notas\n';let acc=0;
+  window._ops.forEach((o,i)=>{acc+=parseFloat(o.result||0);const com=(parseFloat(o.commission||0)+parseFloat(o.swap||0)).toFixed(2);
+  csv+=`${i+1},"${o.activo}","${o.tipo||''}",${parseFloat(o.result||0).toFixed(2)},${com},${acc.toFixed(2)},${o.origen||''},${o.parar||'NO'},"${(o.notas||'').replace(/"/g,"'")}"\n`;});
+  const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);a.download='bitacora.csv';a.click();
 };
 
-window.exportCSV = () => {
-  let csv='#,Activo,Tipo,Resultado,Com+Swap,Acumulado,Origen,Parar,Notas\n'; let acc=0;
-  window._ops.forEach((o,i)=>{
-    acc+=parseFloat(o.result||0);
-    const com=(parseFloat(o.commission||0)+parseFloat(o.swap||0)).toFixed(2);
-    csv+=`${i+1},"${o.activo}","${o.tipo||''}",${parseFloat(o.result||0).toFixed(2)},${com},${acc.toFixed(2)},${o.origen||''},${o.parar||'NO'},"${(o.notas||'').replace(/"/g,"'")}"\n`;
+// ─── CERRAR DÍA ───────────────────────
+window.cerrarDia=()=>{
+  if(!window._ops.length){toast('⚠ No hay operaciones para archivar');return;}
+  const saldo=parseFloat(V('b-saldo').value)||0;
+  const pnl=window._ops.reduce((a,o)=>a+(parseFloat(o.result)||0),0);
+  const wins=window._ops.filter(o=>parseFloat(o.result||0)>0).length;
+  const wr=window._ops.length>0?Math.round(wins/window._ops.length*100):0;
+  V('cerrar-resumen').innerHTML=`
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px">
+      <div><div style="font-size:10px;color:var(--text3)">SALDO INICIAL</div><div style="font-family:var(--mono);font-weight:700">$${saldo.toFixed(2)}</div></div>
+      <div><div style="font-size:10px;color:var(--text3)">P&L DEL DÍA</div><div style="font-family:var(--mono);font-weight:700;color:${pnl>=0?'var(--accent)':'var(--danger)'}">${pnl>=0?'+':''}$${pnl.toFixed(2)}</div></div>
+      <div><div style="font-size:10px;color:var(--text3)">OPERACIONES</div><div style="font-family:var(--mono);font-weight:700">${window._ops.length}</div></div>
+      <div><div style="font-size:10px;color:var(--text3)">WIN RATE</div><div style="font-family:var(--mono);font-weight:700">${wr}%</div></div>
+    </div>`;
+  // Sugerir día del plan automáticamente
+  const inicio=V('p-inicio').value;
+  if(inicio){
+    const diff=Math.floor((new Date()-new Date(inicio))/(1000*60*60*24))+1;
+    if(diff>=1&&diff<=21) V('cerrar-dia-plan').value=diff;
+  }
+  V('modal-cerrar').style.display='flex';
+};
+
+window.confirmarCierreDia=async()=>{
+  const saldo=parseFloat(V('b-saldo').value)||0;
+  const fecha=V('b-fecha').value||new Date().toISOString().slice(0,10);
+  const pnl=window._ops.reduce((a,o)=>a+(parseFloat(o.result)||0),0);
+  const wins=window._ops.filter(o=>parseFloat(o.result||0)>0).length;
+  const losses=window._ops.filter(o=>parseFloat(o.result||0)<0).length;
+  const wr=window._ops.length>0?Math.round(wins/window._ops.length*100):0;
+  const diaPlan=parseInt(V('cerrar-dia-plan').value)||null;
+  const notas=V('cerrar-notas').value.trim();
+  const capitalFinal=saldo+pnl;
+  // Guardar en historial
+  const histEntry={
+    fecha, saldo, pnl, capitalFinal, wins, losses,
+    totalOps:window._ops.length, winRate:wr,
+    diaPlan, notas,
+    trades:window._ops.map(o=>({activo:o.activo,tipo:o.tipo||'',result:parseFloat(o.result||0),origen:o.origen||'manual'})),
+    ts:Date.now()
+  };
+  if(db){
+    await setDoc(doc(db,'rooms',room,'historial',fecha), histEntry);
+    // Limpiar ops del día
+    const snap=await getDocs(rc('ops'));
+    const batch=writeBatch(db);
+    snap.forEach(d=>batch.delete(d.ref));
+    await batch.commit();
+    // Actualizar saldo inicial con capital final
+    await setDoc(rd('config/day'),{
+      saldo:parseFloat(capitalFinal.toFixed(2)),
+      fecha:new Date().toISOString().slice(0,10),
+      metagan:parseFloat(V('b-meta-gan').value)||3,
+      metaperd:parseFloat(V('b-meta-perd').value)||1
+    });
+  }else{
+    _historial.push({id:fecha,...histEntry});
+    window._ops=[];renderOps();calcBitacora();
+    renderHistorial();
+  }
+  V('modal-cerrar').style.display='none';
+  V('cerrar-notas').value='';
+  toast('📦 Día archivado — saldo actualizado a $'+capitalFinal.toFixed(2));
+};
+
+// ─── HISTORIAL ────────────────────────
+function renderHistorial(){
+  if(!_historial.length){
+    V('hist-list').innerHTML='<div class="empty">Sin historial. Usa "Cerrar día y archivar" al terminar cada sesión.</div>';
+    renderHistMetrics(); renderCurvaCapital(); renderRacha(); renderPnlDiaChart();
+    return;
+  }
+  renderHistMetrics();
+  renderCurvaCapital();
+  renderRacha();
+  renderPnlDiaChart();
+  // Lista de días
+  V('hist-list').innerHTML=_historial.slice().reverse().map(d=>{
+    const cls=d.pnl>=0?'pos':'neg';
+    const dp=d.diaPlan?`<span class="badge" style="background:var(--warn-dim);color:var(--warn);border:1px solid #ffb34730">DÍA ${d.diaPlan}</span>`:'';
+    return `<div class="hist-day">
+      <div class="hist-header" onclick="toggleHistDay('${d.id||d.fecha}')">
+        ${dp}
+        <span class="hist-fecha">${d.fecha}</span>
+        <span class="hist-pnl ${cls}">${d.pnl>=0?'+':''}$${parseFloat(d.pnl).toFixed(2)}</span>
+        <span class="hist-wr">WR ${d.winRate||0}%</span>
+        <span class="hist-ops">${d.totalOps||0} ops</span>
+        <span style="color:var(--text3);font-size:12px">▼</span>
+      </div>
+      <div class="hist-body" id="hb-${d.id||d.fecha}">
+        <div style="padding:12px 16px">
+          <div class="metrics" style="margin-bottom:10px">
+            <div class="metric"><div class="ml">Saldo Inicial</div><div class="mv">$${parseFloat(d.saldo||0).toFixed(2)}</div></div>
+            <div class="metric"><div class="ml">Capital Final</div><div class="mv ${cls}">$${parseFloat(d.capitalFinal||0).toFixed(2)}</div></div>
+            <div class="metric"><div class="ml">Ganadas</div><div class="mv pos">${d.wins||0}</div></div>
+            <div class="metric"><div class="ml">Perdidas</div><div class="mv neg">${d.losses||0}</div></div>
+          </div>
+          ${d.notas?`<p style="font-size:13px;color:var(--text2);margin-bottom:10px;font-style:italic">"${d.notas}"</p>`:''}
+          <div class="tw">
+            <table>
+              <thead><tr><th>#</th><th>Activo</th><th>Tipo</th><th>Resultado</th><th>Origen</th></tr></thead>
+              <tbody>${(d.trades||[]).map((t,i)=>{
+                const r=parseFloat(t.result||0),rc=r>=0?'pos':'neg',tc=t.tipo==='BUY'?'b-buy':t.tipo==='SELL'?'b-sell':'';
+                return `<tr><td>${i+1}</td><td><b>${t.activo}</b></td><td>${t.tipo?`<span class="badge ${tc}">${t.tipo}</span>`:'—'}</td><td class="${rc}">${r>=0?'+':''}$${r.toFixed(2)}</td><td>${t.origen==='mt5'?'<span class="badge b-mt5">MT5</span>':'MANUAL'}</td></tr>`;
+              }).join('')}</tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+window.toggleHistDay=id=>{
+  const el=V('hb-'+id);
+  if(el) el.classList.toggle('open');
+};
+
+function renderHistMetrics(){
+  if(!_historial.length){
+    ['hm-dias','hm-pnl','hm-wr','hm-best'].forEach(id=>{V(id).textContent='—';});
+    return;
+  }
+  const totalPnl=_historial.reduce((a,d)=>a+parseFloat(d.pnl||0),0);
+  const totalOps=_historial.reduce((a,d)=>a+(d.totalOps||0),0);
+  const totalWins=_historial.reduce((a,d)=>a+(d.wins||0),0);
+  const wr=totalOps>0?Math.round(totalWins/totalOps*100):0;
+  const bestDay=_historial.reduce((best,d)=>parseFloat(d.pnl||0)>parseFloat(best.pnl||0)?d:best,_historial[0]);
+  V('hm-dias').textContent=_historial.length;
+  V('hm-pnl').textContent=(totalPnl>=0?'+$':'$')+totalPnl.toFixed(2);
+  V('hm-pnl').className='mv '+(totalPnl>=0?'pos':'neg');
+  V('hm-wr').textContent=wr+'%';
+  V('hm-best').textContent='+$'+parseFloat(bestDay.pnl||0).toFixed(2)+' ('+bestDay.fecha+')';
+}
+
+let _capChart=null, _pnlDiaChart=null;
+function renderCurvaCapital(){
+  const canvas=V('capital-chart'); if(!canvas)return;
+  if(!_historial.length){if(_capChart){_capChart.destroy();_capChart=null;}return;}
+  const labels=_historial.map(d=>d.diaPlan?'Día '+d.diaPlan:d.fecha.slice(5));
+  let cap=parseFloat(_historial[0].saldo||0);
+  const data=[cap];
+  _historial.forEach(d=>{cap+=parseFloat(d.pnl||0);data.push(parseFloat(cap.toFixed(2)));});
+  if(_capChart)_capChart.destroy();
+  _capChart=new Chart(canvas,{type:'line',data:{labels:['Inicio',...labels],datasets:[{label:'Capital',data,borderColor:'#00e5a0',backgroundColor:'#00e5a012',tension:.4,fill:true,pointBackgroundColor:'#00e5a0',pointRadius:5,pointHoverRadius:7}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'$'+c.raw.toFixed(2)}}},scales:{x:{ticks:{color:'#8892a4',font:{size:10}},grid:{color:'#ffffff06'}},y:{ticks:{color:'#8892a4',font:{size:10},callback:v=>'$'+v},grid:{color:'#ffffff06'}}}}});
+}
+
+function renderPnlDiaChart(){
+  const canvas=V('pnl-dia-chart'); if(!canvas)return;
+  if(!_historial.length){if(_pnlDiaChart){_pnlDiaChart.destroy();_pnlDiaChart=null;}return;}
+  const labels=_historial.map(d=>d.diaPlan?'D'+d.diaPlan:d.fecha.slice(5));
+  const data=_historial.map(d=>parseFloat(parseFloat(d.pnl||0).toFixed(2)));
+  const colors=data.map(v=>v>=0?'#00e5a060':'#ff4d6d60');
+  const borderColors=data.map(v=>v>=0?'#00e5a0':'#ff4d6d');
+  if(_pnlDiaChart)_pnlDiaChart.destroy();
+  _pnlDiaChart=new Chart(canvas,{type:'bar',data:{labels,datasets:[{label:'P&L',data,backgroundColor:colors,borderColor:borderColors,borderWidth:1,borderRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>(c.raw>=0?'+':'')+'$'+c.raw.toFixed(2)}}},scales:{x:{ticks:{color:'#8892a4',font:{size:10}},grid:{color:'#ffffff06'}},y:{ticks:{color:'#8892a4',font:{size:10},callback:v=>(v>=0?'+':'')+v},grid:{color:'#ffffff06'}}}}});
+}
+
+function renderRacha(){
+  const grid=V('racha-grid'); if(!grid)return;
+  if(!_historial.length){grid.innerHTML='';V('racha-label').textContent='';return;}
+  // Calcular racha actual
+  let rachaActual=0, rachaMax=0, tempRacha=0, tempDir=null;
+  _historial.forEach(d=>{
+    const pos=parseFloat(d.pnl||0)>0;
+    if(tempDir===null) tempDir=pos;
+    if(pos===tempDir) tempRacha++;
+    else{tempRacha=1;tempDir=pos;}
+    if(tempRacha>rachaMax) rachaMax=tempRacha;
   });
-  const a=document.createElement('a'); a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv); a.download='bitacora_mt5.csv'; a.click();
-};
+  rachaActual=tempRacha;
+  const rachaDir=tempDir?'positiva':'negativa';
+  V('racha-label').textContent=`Racha actual: ${rachaActual} días ${rachaDir} | Máxima: ${rachaMax} días`;
+  grid.innerHTML=_historial.map(d=>{
+    const pnl=parseFloat(d.pnl||0);
+    const cls=pnl>0?'rd-pos':pnl<0?'rd-neg':'rd-zero';
+    const label=d.diaPlan?'D'+d.diaPlan:d.fecha.slice(8);
+    return `<div class="racha-day ${cls}" title="${d.fecha}: ${pnl>=0?'+':''}$${pnl.toFixed(2)}">${label}</div>`;
+  }).join('');
+}
 
 // ─── CALCULADORA ──────────────────────
-window.calcLotaje = () => {
-  const pts=parseFloat(V('c-puntos').value)||21, sl=parseFloat(V('c-sl').value)||1;
-  V('cr-profit').textContent=(sl*3).toFixed(2);
-  V('cr-lotaje').textContent=(sl/pts).toFixed(4);
-  V('cr-2ent').textContent=(sl/pts/2).toFixed(4);
-  V('cr-riesgo').textContent=(sl*sl/pts).toFixed(4);
+window.calcLotaje=()=>{
+  const pts=parseFloat(V('c-puntos').value)||21,sl=parseFloat(V('c-sl').value)||1;
+  V('cr-profit').textContent=(sl*3).toFixed(2);V('cr-lotaje').textContent=(sl/pts).toFixed(4);
+  V('cr-2ent').textContent=(sl/pts/2).toFixed(4);V('cr-riesgo').textContent=(sl*sl/pts).toFixed(4);
 };
 
 // ─── RIESGO ───────────────────────────
-window.calcRiesgo = () => {
-  const c=parseFloat(V('r-capital').value)||1000, p=parseFloat(V('r-pct').value)||2, n=parseFloat(V('r-ops').value)||3;
-  const d=c*p/100;
-  V('rr-d').textContent='$'+d.toFixed(2); V('rr-o').textContent='$'+(d/n).toFixed(2); V('rr-s').textContent='$'+(d/n).toFixed(2);
+window.calcRiesgo=()=>{
+  const c=parseFloat(V('r-capital').value)||1000,p=parseFloat(V('r-pct').value)||2,n=parseFloat(V('r-ops').value)||3,d=c*p/100;
+  V('rr-d').textContent='$'+d.toFixed(2);V('rr-o').textContent='$'+(d/n).toFixed(2);V('rr-s').textContent='$'+(d/n).toFixed(2);
 };
-window.saveRiesgo = async () => {
-  if(!db) return;
+window.saveRiesgo=async()=>{
+  if(!db)return;
   await setDoc(rd('config/riesgo'),{capital:parseFloat(V('r-capital').value)||1000,pct:parseFloat(V('r-pct').value)||2,ops:parseFloat(V('r-ops').value)||3});
   toast('✅ Guardado');
 };
 
 // ─── PLAN 21 ──────────────────────────
-window.calcPlan21 = () => {
-  const c=parseFloat(V('p-capital').value)||150, p=parseFloat(V('p-pct').value)||20;
-  const days=[]; let cur=c;
-  for(let i=1;i<=21;i++){cur*=(1+p/100);days.push(cur);}
-  V('p-d1').textContent='$'+days[0].toFixed(2); V('p-d7').textContent='$'+days[6].toFixed(2);
-  V('p-d14').textContent='$'+days[13].toFixed(2); V('p-d21').textContent='$'+days[20].toFixed(2);
-  V('p-ini').textContent='$'+c.toFixed(2); V('p-fin').textContent='$'+days[20].toFixed(2);
-  V('p-gan').textContent='$'+(days[20]-c).toFixed(2); V('p-inc').textContent=((days[20]/c-1)*100).toFixed(0)+'%';
-  V('days-grid').innerHTML=days.map((v,i)=>`<div class="dcell ${[0,6,13,20].includes(i)?'hi':''}"><div class="dn">DÍA ${i+1}</div><div class="dv ${v>=c?'pos':''}">${v>=1000?'$'+(v/1000).toFixed(1)+'k':'$'+v.toFixed(0)}</div></div>`).join('');
+window.calcPlan21=()=>{
+  const c=parseFloat(V('p-capital').value)||150,p=parseFloat(V('p-pct').value)||20;
+  const inicio=V('p-inicio').value;
+  const days=[];let cur=c;
+  for(let i=1;i<=21;i++){cur*=(1+p/100);days.push(parseFloat(cur.toFixed(2)));}
+  V('p-d1').textContent='$'+days[0].toFixed(2);V('p-d7').textContent='$'+days[6].toFixed(2);
+  V('p-d14').textContent='$'+days[13].toFixed(2);V('p-d21').textContent='$'+days[20].toFixed(2);
+  V('p-ini').textContent='$'+c.toFixed(2);V('p-fin').textContent='$'+days[20].toFixed(2);
+  V('p-gan').textContent='$'+(days[20]-c).toFixed(2);V('p-inc').textContent=((days[20]/c-1)*100).toFixed(0)+'%';
+  // Calcular día actual del plan
+  let diaActual=null;
+  if(inicio){
+    const diff=Math.floor((new Date()-new Date(inicio))/(1000*60*60*24))+1;
+    if(diff>=1&&diff<=21){diaActual=diff;V('p-dia-actual').textContent='Día '+diff+' de 21';}
+    else if(diff>21){V('p-dia-actual').textContent='Plan completado ✓';}
+    else{V('p-dia-actual').textContent='—';}
+  }
+  // Construir mapa de días reales del historial
+  const realMap={};
+  _historial.forEach(h=>{ if(h.diaPlan) realMap[h.diaPlan]=parseFloat(h.capitalFinal||0); });
+  V('days-grid').innerHTML=days.map((v,i)=>{
+    const dia=i+1;
+    const esHoy=diaActual===dia;
+    const tieneReal=realMap[dia]!==undefined;
+    const realVal=tieneReal?realMap[dia]:null;
+    const hiClass=esHoy?'hi':[0,6,13,20].includes(i)?'hi':'';
+    const realClass=tieneReal?'real':'';
+    const realHtml=tieneReal
+      ?`<div class="dr ${realVal>=v?'pos':'neg'}">${realVal>=v?'▲':'▼'}$${realVal>=1000?(realVal/1000).toFixed(1)+'k':realVal.toFixed(0)}</div>`
+      :'';
+    const tagHtml=tieneReal?'<div class="dtag"></div>':'';
+    return `<div class="dcell ${hiClass} ${realClass}" title="Proyectado: $${v.toFixed(2)}${tieneReal?' | Real: $'+realVal.toFixed(2):''}">
+      ${tagHtml}
+      <div class="dn">DÍA ${dia}${esHoy?' ←':''}</div>
+      <div class="dv ${v>=c?'pos':''}">${v>=1000?'$'+(v/1000).toFixed(1)+'k':'$'+v.toFixed(0)}</div>
+      ${realHtml}
+    </div>`;
+  }).join('');
 };
-window.savePlan21 = async () => {
-  if(!db) return;
-  await setDoc(rd('config/plan21'),{capital:parseFloat(V('p-capital').value)||150,pct:parseFloat(V('p-pct').value)||20});
-  toast('✅ Guardado');
+window.savePlan21=async()=>{
+  if(!db)return;
+  await setDoc(rd('config/plan21'),{capital:parseFloat(V('p-capital').value)||150,pct:parseFloat(V('p-pct').value)||20,inicio:V('p-inicio').value});
+  toast('✅ Plan guardado');
 };
 
-// ─── SALUD ────────────────────────────
+// ─── SALUD + ALARMAS ──────────────────
 window._salud={agua:false,estirar:false,meds:false,loz9:false,aml4:false,loz9pm:false,notas:''};
 let _deb=null;
-window.toggleH = async k => { window._salud[k]=!window._salud[k]; renderSalud(window._salud); if(db) await setDoc(rd('config/salud'),window._salud); };
-window.toggleM = async k => { window._salud[k]=!window._salud[k]; renderSalud(window._salud); if(db) await setDoc(rd('config/salud'),window._salud); };
-window.debSalud = () => { window._salud.notas=V('salud-notas').value; clearTimeout(_deb); _deb=setTimeout(async()=>{ if(db) await setDoc(rd('config/salud'),window._salud); },700); };
+window.toggleH=async k=>{window._salud[k]=!window._salud[k];renderSalud(window._salud);if(db)await setDoc(rd('config/salud'),window._salud);};
+window.toggleM=async k=>{window._salud[k]=!window._salud[k];renderSalud(window._salud);if(db)await setDoc(rd('config/salud'),window._salud);};
+window.debSalud=()=>{window._salud.notas=V('salud-notas').value;clearTimeout(_deb);_deb=setTimeout(async()=>{if(db)await setDoc(rd('config/salud'),window._salud);},700);};
+
 function renderSalud(d){
-  ['agua','estirar','meds'].forEach(k=>{ const el=V('h-'+k); if(el) el.classList.toggle('done',!!d[k]); });
-  ['loz9','aml4','loz9pm'].forEach(k=>{ const el=V('med-'+k); if(el) el.classList.toggle('taken',!!d[k]); });
-  const n=V('salud-notas'); if(n&&d.notas!==undefined&&n!==document.activeElement) n.value=d.notas||'';
+  ['agua','estirar','meds'].forEach(k=>{const el=V('h-'+k);if(el)el.classList.toggle('done',!!d[k]);});
+  ['loz9','aml4','loz9pm'].forEach(k=>{
+    const med=V('med-'+k);
+    if(med){
+      med.classList.toggle('taken',!!d[k]);
+      const chk=V('chk-'+k);
+      if(chk) chk.style.background=d[k]?'var(--accent)':'';
+    }
+  });
+  const n=V('salud-notas');if(n&&d.notas!==undefined&&n!==document.activeElement)n.value=d.notas||'';
 }
 
-// ─── CHART ────────────────────────────
+// Alarmas de medicamentos
+const ALARMAS=[
+  {id:'loz9',  label:'Losartán',   hora:9,  min:0,  key:'loz9'},
+  {id:'aml4',  label:'Amlodipina', hora:16, min:0,  key:'aml4'},
+  {id:'loz9pm',label:'Losartán',   hora:21, min:0,  key:'loz9pm'},
+];
+let _alarmShown={};
+
+function checkAlarmas(){
+  const now=new Date();
+  const h=now.getHours(), m=now.getMinutes();
+  ALARMAS.forEach(a=>{
+    const rowEl=V('alarm-'+a.id);
+    // Ventana de alarma: ±5 minutos de la hora exacta
+    const enVentana=h===a.hora && m>=a.min && m<a.min+6;
+    const yaVisto=_alarmShown[a.id+'-'+h];
+    const yaTomado=window._salud[a.key];
+    if(enVentana && !yaVisto && !yaTomado){
+      _alarmShown[a.id+'-'+h]=true;
+      // Activar panel de alarma
+      V('alarm-msg').textContent=`⏰ ${a.label} — ${a.hora}:${String(a.min).padStart(2,'0')} ${a.hora<12?'AM':'PM'}`;
+      V('alarm-panel').classList.add('active');
+      if(rowEl) rowEl.classList.add('firing');
+      // Badge en nav salud
+      const navSalud=V('nav-salud');
+      if(navSalud&&!navSalud.querySelector('.nbadge')){
+        const b=document.createElement('span');b.className='nbadge';navSalud.appendChild(b);
+      }
+      // Notificación del navegador
+      if(Notification.permission==='granted'){
+        new Notification('💊 Medicamento',{body:`Hora de tomar ${a.label}`,icon:''});
+      }
+      toast('🔔 '+a.label+' — hora de tomar');
+    }
+    if(!enVentana&&rowEl) rowEl.classList.remove('firing');
+    if(yaTomado&&rowEl) rowEl.classList.remove('firing');
+  });
+}
+// Pedir permiso para notificaciones
+if('Notification' in window && Notification.permission==='default'){
+  Notification.requestPermission();
+}
+setInterval(checkAlarmas, 30000);
+checkAlarmas();
+
+// ─── CHART BITACORA ───────────────────
 let _chart=null;
-window.renderChart = () => {
-  const canvas=V('pnl-chart'); if(!canvas) return;
-  const labels=[],data=[]; let acc=0;
-  window._ops.forEach((o,i)=>{ acc+=parseFloat(o.result||0); labels.push('#'+(i+1)); data.push(parseFloat(acc.toFixed(2))); });
-  if(!labels.length){ if(_chart){_chart.destroy();_chart=null;} return; }
-  if(_chart) _chart.destroy();
+window.renderChart=()=>{
+  const canvas=V('pnl-chart');if(!canvas)return;
+  const labels=[],data=[];let acc=0;
+  window._ops.forEach((o,i)=>{acc+=parseFloat(o.result||0);labels.push('#'+(i+1));data.push(parseFloat(acc.toFixed(2)));});
+  if(!labels.length){if(_chart){_chart.destroy();_chart=null;}return;}
+  if(_chart)_chart.destroy();
   _chart=new Chart(canvas,{type:'line',data:{labels,datasets:[{label:'P&L',data,borderColor:'#00e5a0',backgroundColor:'#00e5a010',tension:.4,fill:true,pointBackgroundColor:'#00e5a0',pointRadius:4}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{x:{ticks:{color:'#8892a4',font:{size:11}},grid:{color:'#ffffff06'}},y:{ticks:{color:'#8892a4',font:{size:11}},grid:{color:'#ffffff06'}}}}});
 };
 
 // ─── FEED ─────────────────────────────
-function feedLog(type, msg){
+function feedLog(type,msg){
   const feed=V('live-feed');
   const now=new Date().toLocaleTimeString('es',{hour:'2-digit',minute:'2-digit',second:'2-digit'});
-  const row=document.createElement('div'); row.className=`frow ${type}`;
+  const row=document.createElement('div');row.className=`frow ${type}`;
   row.innerHTML=`<span class="ft">${now}</span><span class="fm">${msg}</span>`;
   feed.prepend(row);
-  while(feed.children.length>60) feed.removeChild(feed.lastChild);
+  while(feed.children.length>60)feed.removeChild(feed.lastChild);
 }
 
 // ─── UI ───────────────────────────────
-window.nav = (name,btn) => {
+window.nav=(name,btn)=>{
   document.querySelectorAll('.tab').forEach(t=>t.classList.remove('active'));
   document.querySelectorAll('.nav-btn').forEach(b=>b.classList.remove('active'));
   V('tab-'+name).classList.add('active');
   btn.classList.add('active');
+  // Quitar badge de salud si se abre esa pestaña
+  if(name==='salud'){const b=btn.querySelector('.nbadge');if(b)b.remove();}
 };
-window.toast = msg => {
-  const w=V('toasts'); const el=document.createElement('div'); el.className='toast'; el.textContent=msg; w.appendChild(el);
-  setTimeout(()=>el.remove(),3000);
+window.toast=msg=>{
+  const w=V('toasts');const el=document.createElement('div');el.className='toast';el.textContent=msg;w.appendChild(el);
+  setTimeout(()=>el.remove(),3500);
 };
-function V(id){ return document.getElementById(id); }
+function V(id){return document.getElementById(id);}
 
 // ─── INIT ─────────────────────────────
-V('b-fecha').value = new Date().toISOString().slice(0,10);
-calcBitacora(); calcLotaje(); calcRiesgo(); calcPlan21();
+V('b-fecha').value=new Date().toISOString().slice(0,10);
+V('p-inicio').value=new Date().toISOString().slice(0,10);
+calcBitacora();calcLotaje();calcRiesgo();calcPlan21();
 </script>
 </body>
 </html>
