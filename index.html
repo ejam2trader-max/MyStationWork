@@ -151,6 +151,14 @@ tr:hover td{background:#ffffff04}
 .toast{padding:9px 15px;background:var(--surface3);border:1px solid var(--border2);border-radius:var(--r2);font-size:13px;color:var(--text);animation:tin .25s ease}
 @keyframes tin{from{opacity:0;transform:translateY(8px)}}
 hr{border:none;border-top:1px solid var(--border);margin:14px 0}
+
+/* ANÁLISIS HISTÓRICO */
+.an-metrics-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:12px}
+@media(min-width:560px){.an-metrics-grid{grid-template-columns:repeat(4,1fr)}}
+.prog-bar{height:6px;background:var(--surface3);border-radius:3px;margin-top:6px;overflow:hidden}
+.prog-fill{height:100%;background:var(--accent);border-radius:3px;transition:width .5s}
+.sync-info{font-size:11px;color:var(--text3);font-family:var(--mono)}
+
 @media(max-width:500px){.fr,.fr3{grid-template-columns:1fr}.metrics{grid-template-columns:1fr 1fr}.main{padding:12px}.mt5-grid{grid-template-columns:repeat(2,1fr)}}
 </style>
 </head>
@@ -173,6 +181,7 @@ hr{border:none;border-top:1px solid var(--border);margin:14px 0}
   <button class="nav-btn" onclick="nav('calculadora',this)">⚡ Calc</button>
   <button class="nav-btn" onclick="nav('riesgo',this)">🛡 Riesgo</button>
   <button class="nav-btn" onclick="nav('plan21',this)">📈 21 Días</button>
+  <button class="nav-btn" onclick="nav('analisis',this)" id="nav-analisis">🔬 Análisis</button>
   <button class="nav-btn" onclick="nav('salud',this)" id="nav-salud">❤️ Salud</button>
 </nav>
 
@@ -382,6 +391,117 @@ hr{border:none;border-top:1px solid var(--border);margin:14px 0}
   </div>
 </div>
 
+<!-- ══ PESTAÑA ANÁLISIS MT5 ══ -->
+<div id="tab-analisis" class="tab">
+
+  <!-- BARRA DE CONTROL -->
+  <div class="card" style="margin-bottom:12px">
+    <div class="card-title"><span>Análisis Histórico MT5</span>
+      <div class="dot pulse" id="sync-dot" style="background:var(--text3)"></div>
+    </div>
+    <div id="sync-status-bar" style="font-size:12px;color:var(--text2);margin-bottom:12px;font-family:var(--mono)">Cargando historial…</div>
+
+    <!-- FILTROS -->
+    <div class="fr3" style="margin-bottom:8px">
+      <div>
+        <label>Desde</label>
+        <input type="date" id="af-desde">
+      </div>
+      <div>
+        <label>Hasta</label>
+        <input type="date" id="af-hasta">
+      </div>
+      <div>
+        <label>Activo / Índice</label>
+        <select id="af-activo"><option value="">Todos</option></select>
+      </div>
+    </div>
+    <div class="fr" style="margin-bottom:0">
+      <div>
+        <label>Tipo</label>
+        <select id="af-tipo">
+          <option value="">BUY + SELL</option>
+          <option value="BUY">Solo BUY</option>
+          <option value="SELL">Solo SELL</option>
+        </select>
+      </div>
+      <div style="display:flex;align-items:flex-end;gap:8px">
+        <button class="btn btn-primary" onclick="aplicarFiltros()" style="flex:1">🔍 Filtrar</button>
+        <button class="btn btn-ghost" onclick="resetFiltros()">↺</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MÉTRICAS FILTRADAS -->
+  <div style="display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:12px" id="an-metrics-grid">
+    <div class="metric"><div class="ml">Operaciones</div><div class="mv" id="an-total">0</div></div>
+    <div class="metric"><div class="ml">P&L Total</div><div class="mv" id="an-pnl">$0.00</div></div>
+    <div class="metric"><div class="ml">Win Rate</div><div class="mv" id="an-wr">0%</div></div>
+    <div class="metric"><div class="ml">Profit Factor</div><div class="mv" id="an-pf">0.00</div></div>
+    <div class="metric"><div class="ml">Mejor Trade</div><div class="mv pos" id="an-best">—</div></div>
+    <div class="metric"><div class="ml">Peor Trade</div><div class="mv neg" id="an-worst">—</div></div>
+    <div class="metric"><div class="ml">Promedio Ganancia</div><div class="mv pos" id="an-avg-win">—</div></div>
+    <div class="metric"><div class="ml">Promedio Pérdida</div><div class="mv neg" id="an-avg-loss">—</div></div>
+  </div>
+
+  <!-- GRÁFICO: CURVA DE CAPITAL -->
+  <div class="card">
+    <div class="card-title"><span>Curva de Capital</span>
+      <div style="display:flex;gap:6px">
+        <button class="btn btn-ghost btn-sm" onclick="setCapRange('7d')">7D</button>
+        <button class="btn btn-ghost btn-sm" onclick="setCapRange('30d')">30D</button>
+        <button class="btn btn-ghost btn-sm" onclick="setCapRange('90d')">90D</button>
+        <button class="btn btn-ghost btn-sm" onclick="setCapRange('all')">TODO</button>
+      </div>
+    </div>
+    <div style="position:relative;height:240px"><canvas id="an-capital-chart"></canvas></div>
+  </div>
+
+  <!-- GRÁFICOS FILA 2 -->
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px">
+    <!-- P&L POR ACTIVO -->
+    <div class="card" style="margin-bottom:0">
+      <div class="card-title"><span>P&L por Activo</span></div>
+      <div style="position:relative;height:200px"><canvas id="an-activo-chart"></canvas></div>
+    </div>
+    <!-- WIN RATE POR ACTIVO -->
+    <div class="card" style="margin-bottom:0">
+      <div class="card-title"><span>Win Rate por Activo</span></div>
+      <div style="position:relative;height:200px"><canvas id="an-wr-chart"></canvas></div>
+    </div>
+  </div>
+
+  <!-- DISTRIBUCIÓN GANANCIA/PÉRDIDA -->
+  <div class="card">
+    <div class="card-title"><span>Distribución de Resultados</span></div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+      <div style="position:relative;height:180px"><canvas id="an-dist-chart"></canvas></div>
+      <div style="display:flex;flex-direction:column;justify-content:center;gap:10px" id="an-dist-legend"></div>
+    </div>
+  </div>
+
+  <!-- TABLA DE TRADES -->
+  <div class="card">
+    <div class="card-title">
+      <span>Detalle de Operaciones</span>
+      <span id="an-tabla-count" style="font-size:11px;color:var(--text2)">0 trades</span>
+      <button class="btn btn-ghost btn-sm" onclick="exportarHistorialCSV()">📥 CSV</button>
+    </div>
+    <div class="tw">
+      <table>
+        <thead><tr>
+          <th>#</th><th>Fecha</th><th>Activo</th><th>Tipo</th>
+          <th>Volumen</th><th>Precio</th><th>Profit</th><th>Com+Swap</th><th>Resultado</th>
+        </tr></thead>
+        <tbody id="an-tbody">
+          <tr><td colspan="9" class="empty">Cargando historial desde Firebase…</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div style="display:flex;justify-content:center;gap:8px;margin-top:10px" id="an-paginacion"></div>
+  </div>
+</div>
+
 </div><!-- /main -->
 </div><!-- /app -->
 
@@ -424,12 +544,12 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/fireba
 import { getFirestore, doc, setDoc, getDoc, onSnapshot, collection, addDoc, deleteDoc, query, orderBy, getDocs, writeBatch } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyB7DKpMIT6Quw2psRpMxjHzoUCXwmEnhj0",
-  authDomain: "station-trading-grace.firebaseapp.com",
-  projectId: "station-trading-grace",
-  storageBucket: "station-trading-grace.firebasestorage.app",
-  messagingSenderId: "1075471867622",
-  appId: "1:1075471867622:web:707ede01361dadc2676527"
+  apiKey:            "TU_API_KEY",
+  authDomain:        "TU_PROYECTO.firebaseapp.com",
+  projectId:         "TU_PROYECTO_ID",
+  storageBucket:     "TU_PROYECTO.appspot.com",
+  messagingSenderId: "TU_SENDER_ID",
+  appId:             "TU_APP_ID"
 };
 
 // ─── ROOM ─────────────────────────────
@@ -957,8 +1077,338 @@ window.toast=msg=>{
 };
 function V(id){return document.getElementById(id);}
 
+
+
+// ─── SYNC MANUAL ─────────────────────
+window.pedirSyncManual = async () => {
+  if(!db){ toast('Firebase no configurado'); return; }
+  const btn = V('btn-sync-manual');
+  if(btn){ btn.disabled=true; btn.textContent='⏳ Enviando orden…'; }
+  // Escribir trigger en Firestore — el EA lo lee cada 10s
+  await setDoc(rd('config/sync_trigger'), { pedido: true, ts: Date.now() });
+  toast('📡 Orden enviada al EA — iniciará en ~10 segundos');
+  // Restaurar botón tras 15s
+  setTimeout(()=>{
+    if(btn){ btn.disabled=false; btn.textContent='🔄 Sincronizar ahora'; }
+  }, 15000);
+};
+
+function renderSyncStatus(d){
+  const dot = V('sync-dot');
+  const bar = V('sync-status-bar');
+  const prog = V('sync-prog-wrap');
+  const fill = V('sync-prog-fill');
+  const btn  = V('btn-sync-manual');
+  if(!d) return;
+  const estado = d.estado || '';
+
+  if(estado === 'exportando'){
+    if(dot){ dot.style.background='var(--warn)'; dot.className='dot warn pulse'; }
+    const pct = d.total>0 ? Math.round(d.enviados/d.total*100) : 0;
+    if(bar) bar.textContent = `Exportando: ${d.enviados||0} / ${d.total||0} deals (${pct}%)`;
+    if(prog) prog.style.display='block';
+    if(fill) fill.style.width = pct+'%';
+    if(btn){ btn.disabled=true; btn.textContent='⏳ Exportando…'; }
+
+  } else if(estado === 'completo'){
+    if(dot){ dot.style.background='var(--accent)'; dot.className='dot on'; }
+    const ts = d.ultimaSync ? new Date(d.ultimaSync).toLocaleString('es') : '—';
+    if(bar) bar.textContent = `✓ ${d.enviados||0} trades — última sync: ${ts} | Login: ${d.login||'?'}`;
+    if(prog) prog.style.display='none';
+    if(btn){ btn.disabled=false; btn.textContent='🔄 Sincronizar ahora'; }
+
+  } else if(estado === 'listo_manual'){
+    if(dot){ dot.style.background='var(--info)'; dot.className='dot on'; }
+    if(bar) bar.textContent = 'EA conectado y listo — pulsa "Sincronizar ahora" para exportar';
+    if(prog) prog.style.display='none';
+    if(btn){ btn.disabled=false; btn.textContent='🔄 Sincronizar ahora'; }
+
+  } else {
+    if(dot) dot.style.background='var(--text3)';
+    if(bar) bar.textContent = estado || 'Instala HistorialExporter.mq5 en MT5';
+    if(prog) prog.style.display='none';
+  }
+}
+
+// ─── ANÁLISIS HISTÓRICO ───────────────
+let _rawHistorial = [];
+let _filtrado     = [];
+let _capRange     = 'all';
+let _anPage       = 0;
+const PAGE_SIZE   = 50;
+let _capChart=null, _activoChart=null, _wrChart=null, _distChart=null;
+
+function setupAnalisisListener(){
+  // Escuchar colección mt5_historial en tiempo real
+  onSnapshot(query(rc('mt5_historial'), orderBy('ts')), s=>{
+    _rawHistorial = s.docs.map(d=>({id:d.id,...d.data()}));
+    poblarFiltroActivos();
+    aplicarFiltros();
+  });
+  // Estado de sincronización
+  onSnapshot(rd('config/sync_trigger'), s=>{
+    // Cuando el EA marca procesando=false y estado=completo, restaurar botón
+  });
+  onSnapshot(rd('config/sync_estado'), s=>{
+    if(!s.exists()) return;
+    const d=s.data();
+    renderSyncStatus(d);
+  });
+}
+
+
+  const estado=d.estado||'';
+  if(estado==='exportando'){
+    if(dot){dot.style.background='var(--warn)';dot.className='dot warn pulse';}
+    const pct=d.total>0?Math.round(d.enviados/d.total*100):0;
+    if(bar) bar.innerHTML=`Exportando: ${d.enviados||0}/${d.total||0} deals (${pct}%)
+      <div class="prog-bar"><div class="prog-fill" style="width:${pct}%"></div></div>`;
+  } else if(estado==='completo'){
+    if(dot){dot.style.background='var(--accent)';dot.className='dot on';}
+    const ts=d.ultimaSync?new Date(d.ultimaSync).toLocaleString('es'):'—';
+    if(bar) bar.innerHTML=`✓ ${d.enviados||0} trades sincronizados | Última sync: ${ts} | Login: ${d.login||'?'}`;
+  } else {
+    if(dot) dot.style.background='var(--text3)';
+    if(bar) bar.textContent=estado||'Sin sincronizar — instala HistorialExporter.mq5';
+  }
+}
+
+function poblarFiltroActivos(){
+  const sel=V('af-activo'); if(!sel) return;
+  const activos=[...new Set(_rawHistorial.map(d=>d.activo).filter(Boolean))].sort();
+  const cur=sel.value;
+  sel.innerHTML='<option value="">Todos</option>'+activos.map(a=>`<option value="${a}">${a}</option>`).join('');
+  if(cur) sel.value=cur;
+}
+
+window.aplicarFiltros=()=>{
+  const desde=V('af-desde').value;
+  const hasta=V('af-hasta').value;
+  const activo=V('af-activo').value;
+  const tipo=V('af-tipo').value;
+  _filtrado=_rawHistorial.filter(d=>{
+    if(desde && d.fecha && d.fecha<desde) return false;
+    if(hasta && d.fecha && d.fecha>hasta) return false;
+    if(activo && d.activo!==activo) return false;
+    if(tipo && d.tipo!==tipo) return false;
+    return true;
+  });
+  _anPage=0;
+  renderMetricas();
+  renderCapitalChart();
+  renderActivoChart();
+  renderWRChart();
+  renderDistChart();
+  renderTabla();
+};
+
+window.resetFiltros=()=>{
+  V('af-desde').value=''; V('af-hasta').value='';
+  V('af-activo').value=''; V('af-tipo').value='';
+  aplicarFiltros();
+};
+
+window.setCapRange=range=>{
+  _capRange=range; renderCapitalChart();
+};
+
+function renderMetricas(){
+  const ops=_filtrado;
+  if(!ops.length){
+    ['an-total','an-pnl','an-wr','an-pf','an-best','an-worst','an-avg-win','an-avg-loss']
+      .forEach(id=>{const el=V(id);if(el){el.textContent='—';el.className='mv';}});
+    return;
+  }
+  const pnl=ops.reduce((a,o)=>a+parseFloat(o.result||0),0);
+  const wins=ops.filter(o=>parseFloat(o.result||0)>0);
+  const losses=ops.filter(o=>parseFloat(o.result||0)<0);
+  const wr=Math.round(wins.length/ops.length*100);
+  const grossWin=wins.reduce((a,o)=>a+parseFloat(o.result||0),0);
+  const grossLoss=Math.abs(losses.reduce((a,o)=>a+parseFloat(o.result||0),0));
+  const pf=grossLoss>0?(grossWin/grossLoss):grossWin>0?999:0;
+  const best=ops.reduce((a,o)=>parseFloat(o.result||0)>parseFloat(a.result||0)?o:a,ops[0]);
+  const worst=ops.reduce((a,o)=>parseFloat(o.result||0)<parseFloat(a.result||0)?o:a,ops[0]);
+  const avgWin=wins.length>0?grossWin/wins.length:0;
+  const avgLoss=losses.length>0?grossLoss/losses.length:0;
+
+  V('an-total').textContent=ops.length;
+  const pnlEl=V('an-pnl'); pnlEl.textContent=(pnl>=0?'+$':'$')+pnl.toFixed(2); pnlEl.className='mv '+(pnl>=0?'pos':'neg');
+  V('an-wr').textContent=wr+'%';
+  V('an-pf').textContent=pf>=999?'∞':pf.toFixed(2);
+  V('an-best').textContent='+$'+parseFloat(best.result||0).toFixed(2)+' ('+best.activo+')';
+  V('an-worst').textContent='$'+parseFloat(worst.result||0).toFixed(2)+' ('+worst.activo+')';
+  V('an-avg-win').textContent='+$'+avgWin.toFixed(2);
+  V('an-avg-loss').textContent='-$'+avgLoss.toFixed(2);
+}
+
+function renderCapitalChart(){
+  const canvas=V('an-capital-chart'); if(!canvas) return;
+  let data=[..._filtrado].sort((a,b)=>a.ts-b.ts);
+  // Filtrar por rango de tiempo
+  if(_capRange!=='all'){
+    const dias={'7d':7,'30d':30,'90d':90}[_capRange]||9999;
+    const cutoff=Date.now()-dias*86400000;
+    data=data.filter(d=>(d.ts||0)>=cutoff);
+  }
+  if(!data.length){if(_capChart){_capChart.destroy();_capChart=null;}return;}
+  // Agrupar por día para curva diaria
+  const dayMap={};
+  data.forEach(d=>{
+    const dia=d.fecha||new Date(d.ts).toISOString().slice(0,10);
+    if(!dayMap[dia]) dayMap[dia]=0;
+    dayMap[dia]+=parseFloat(d.result||0);
+  });
+  const dias=Object.keys(dayMap).sort();
+  let cap=0; const capData=[0];
+  dias.forEach(d=>{cap+=dayMap[d];capData.push(parseFloat(cap.toFixed(2)));});
+  const labels=['Inicio',...dias.map(d=>d.slice(5))];
+  if(_capChart) _capChart.destroy();
+  _capChart=new Chart(canvas,{type:'line',data:{labels,datasets:[{
+    label:'Capital',data:capData,borderColor:'#00e5a0',backgroundColor:'#00e5a010',
+    tension:.4,fill:true,pointRadius:3,pointBackgroundColor:'#00e5a0'
+  }]},options:{responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>'$'+c.raw.toFixed(2)}}},
+    scales:{x:{ticks:{color:'#8892a4',font:{size:10},maxTicksLimit:12},grid:{color:'#ffffff06'}},
+            y:{ticks:{color:'#8892a4',font:{size:10},callback:v=>'$'+v},grid:{color:'#ffffff06'}}}}});
+}
+
+function renderActivoChart(){
+  const canvas=V('an-activo-chart'); if(!canvas) return;
+  const activos={};
+  _filtrado.forEach(d=>{
+    const a=d.activo||'?';
+    if(!activos[a]) activos[a]=0;
+    activos[a]+=parseFloat(d.result||0);
+  });
+  const sorted=Object.entries(activos).sort((a,b)=>b[1]-a[1]);
+  const labels=sorted.map(e=>e[0]);
+  const values=sorted.map(e=>parseFloat(e[1].toFixed(2)));
+  const colors=values.map(v=>v>=0?'#00e5a060':'#ff4d6d60');
+  const border=values.map(v=>v>=0?'#00e5a0':'#ff4d6d');
+  if(_activoChart) _activoChart.destroy();
+  _activoChart=new Chart(canvas,{type:'bar',data:{labels,datasets:[{
+    data:values,backgroundColor:colors,borderColor:border,borderWidth:1,borderRadius:4
+  }]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>(c.raw>=0?'+':'')+'$'+c.raw.toFixed(2)}}},
+    scales:{x:{ticks:{color:'#8892a4',font:{size:10},callback:v=>'$'+v},grid:{color:'#ffffff06'}},
+            y:{ticks:{color:'#8892a4',font:{size:10}},grid:{color:'#ffffff06'}}}}});
+}
+
+function renderWRChart(){
+  const canvas=V('an-wr-chart'); if(!canvas) return;
+  const activos={};
+  _filtrado.forEach(d=>{
+    const a=d.activo||'?';
+    if(!activos[a]) activos[a]={wins:0,total:0};
+    activos[a].total++;
+    if(parseFloat(d.result||0)>0) activos[a].wins++;
+  });
+  const sorted=Object.entries(activos).filter(e=>e[1].total>=2).sort((a,b)=>b[1].wins/b[1].total-a[1].wins/a[1].total);
+  const labels=sorted.map(e=>e[0]);
+  const values=sorted.map(e=>Math.round(e[1].wins/e[1].total*100));
+  const colors=values.map(v=>v>=50?'#00e5a060':'#ff4d6d60');
+  const border=values.map(v=>v>=50?'#00e5a0':'#ff4d6d');
+  if(_wrChart) _wrChart.destroy();
+  _wrChart=new Chart(canvas,{type:'bar',data:{labels,datasets:[{
+    data:values,backgroundColor:colors,borderColor:border,borderWidth:1,borderRadius:4
+  }]},options:{indexAxis:'y',responsive:true,maintainAspectRatio:false,
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.raw+'%'}}},
+    scales:{x:{min:0,max:100,ticks:{color:'#8892a4',font:{size:10},callback:v=>v+'%'},grid:{color:'#ffffff06'}},
+            y:{ticks:{color:'#8892a4',font:{size:10}},grid:{color:'#ffffff06'}}}}});
+}
+
+function renderDistChart(){
+  const canvas=V('an-dist-chart'); if(!canvas) return;
+  const wins=_filtrado.filter(d=>parseFloat(d.result||0)>0).length;
+  const losses=_filtrado.filter(d=>parseFloat(d.result||0)<0).length;
+  const breakeven=_filtrado.filter(d=>parseFloat(d.result||0)===0).length;
+  if(_distChart) _distChart.destroy();
+  _distChart=new Chart(canvas,{type:'doughnut',data:{
+    labels:['Ganadoras','Perdedoras','Break-even'],
+    datasets:[{data:[wins,losses,breakeven],backgroundColor:['#00e5a060','#ff4d6d60','#ffb34740'],
+      borderColor:['#00e5a0','#ff4d6d','#ffb347'],borderWidth:1}]
+  },options:{responsive:true,maintainAspectRatio:false,cutout:'65%',
+    plugins:{legend:{display:false},tooltip:{callbacks:{label:c=>c.label+': '+c.raw+' ('+Math.round(c.raw/(_filtrado.length||1)*100)+'%)'}}}
+  }});
+  const leg=V('an-dist-legend');
+  if(leg) leg.innerHTML=[
+    {l:'Ganadoras',v:wins,c:'var(--accent)'},
+    {l:'Perdedoras',v:losses,c:'var(--danger)'},
+    {l:'Break-even',v:breakeven,c:'var(--warn)'}
+  ].map(e=>`<div style="display:flex;align-items:center;gap:8px">
+    <div style="width:10px;height:10px;border-radius:2px;background:${e.c};flex-shrink:0"></div>
+    <span style="font-size:12px;color:var(--text2)">${e.l}</span>
+    <span style="font-family:var(--mono);font-size:13px;font-weight:700;color:${e.c};margin-left:auto">${e.v}</span>
+  </div>`).join('');
+}
+
+function renderTabla(){
+  const tb=V('an-tbody');
+  const count=V('an-tabla-count');
+  if(!_filtrado.length){
+    if(tb) tb.innerHTML='<tr><td colspan="9" class="empty">Sin operaciones con los filtros actuales.</td></tr>';
+    if(count) count.textContent='0 trades';
+    renderPaginacion();
+    return;
+  }
+  if(count) count.textContent=_filtrado.length+' trades';
+  const sorted=[..._filtrado].sort((a,b)=>b.ts-a.ts);
+  const inicio=_anPage*PAGE_SIZE;
+  const pagina=sorted.slice(inicio,inicio+PAGE_SIZE);
+  if(tb) tb.innerHTML=pagina.map((o,i)=>{
+    const r=parseFloat(o.result||0),cls=r>=0?'pos':'neg';
+    const tc=o.tipo==='BUY'?'b-buy':o.tipo==='SELL'?'b-sell':'';
+    const com=(parseFloat(o.commission||0)+parseFloat(o.swap||0));
+    const fecha=o.fecha||new Date(o.ts).toISOString().slice(0,10);
+    return `<tr>
+      <td style="color:var(--text3)">${inicio+i+1}</td>
+      <td style="font-family:var(--mono);font-size:11px">${fecha}</td>
+      <td><b>${o.activo||'?'}</b></td>
+      <td>${o.tipo?`<span class="badge ${tc}">${o.tipo}</span>`:'—'}</td>
+      <td style="font-family:var(--mono);font-size:12px">${parseFloat(o.volume||0).toFixed(2)}</td>
+      <td style="font-family:var(--mono);font-size:11px;color:var(--text2)">${parseFloat(o.price||0).toFixed(5)}</td>
+      <td class="${cls}" style="font-family:var(--mono)">${r>=0?'+':''}${r.toFixed(2)}</td>
+      <td style="font-family:var(--mono);font-size:11px;color:var(--text3)">${com!==0?com.toFixed(2):'—'}</td>
+      <td class="${cls}" style="font-family:var(--mono);font-weight:700">${r>=0?'+':''}${r.toFixed(2)}</td>
+    </tr>`;
+  }).join('');
+  renderPaginacion();
+}
+
+function renderPaginacion(){
+  const cont=V('an-paginacion'); if(!cont) return;
+  const totalPages=Math.ceil(_filtrado.length/PAGE_SIZE);
+  if(totalPages<=1){cont.innerHTML='';return;}
+  let html='';
+  if(_anPage>0) html+=`<button class="btn btn-ghost btn-sm" onclick="irPagina(${_anPage-1})">← Ant</button>`;
+  html+=`<span style="font-size:12px;color:var(--text2);padding:0 10px">Pág ${_anPage+1} de ${totalPages}</span>`;
+  if(_anPage<totalPages-1) html+=`<button class="btn btn-ghost btn-sm" onclick="irPagina(${_anPage+1})">Sig →</button>`;
+  cont.innerHTML=html;
+}
+window.irPagina=p=>{_anPage=p;renderTabla();};
+
+window.exportarHistorialCSV=()=>{
+  let csv='#,Fecha,Activo,Tipo,Volumen,Precio,Profit,Com+Swap,Resultado
+';
+  const sorted=[..._filtrado].sort((a,b)=>b.ts-a.ts);
+  sorted.forEach((o,i)=>{
+    const com=(parseFloat(o.commission||0)+parseFloat(o.swap||0)).toFixed(2);
+    const fecha=o.fecha||new Date(o.ts).toISOString().slice(0,10);
+    csv+=`${i+1},${fecha},"${o.activo||''}","${o.tipo||''}",${parseFloat(o.volume||0).toFixed(2)},${parseFloat(o.price||0).toFixed(5)},${parseFloat(o.profit||0).toFixed(2)},${com},${parseFloat(o.result||0).toFixed(2)}
+`;
+  });
+  const a=document.createElement('a');a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
+  a.download='mt5_historial.csv';a.click();
+};
+
 // ─── INIT ─────────────────────────────
 V('b-fecha').value=new Date().toISOString().slice(0,10);
+// Fechas default para filtros análisis
+const _hoy=new Date().toISOString().slice(0,10);
+const _hace30=new Date(Date.now()-30*86400000).toISOString().slice(0,10);
+if(V('af-desde')) V('af-desde').value=_hace30;
+if(V('af-hasta')) V('af-hasta').value=_hoy;
+if(db) setupAnalisisListener();
 V('p-inicio').value=new Date().toISOString().slice(0,10);
 calcBitacora();calcLotaje();calcRiesgo();calcPlan21();
 </script>
